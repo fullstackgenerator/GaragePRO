@@ -22,7 +22,7 @@ namespace GaragePRO.Controllers
 
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return BadRequest();
 
             var customer = await _context.Customers
                 .FirstOrDefaultAsync(c => c.Id == id);
@@ -39,7 +39,7 @@ namespace GaragePRO.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Email,Phone")] Customer customer)
+        public async Task<IActionResult> Create([Bind("Id,FullName,Email,Phone,Address,City,PostalCode")] Customer customer)
         {
             if (ModelState.IsValid)
             {
@@ -53,7 +53,7 @@ namespace GaragePRO.Controllers
 
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return BadRequest();
 
             var customer = await _context.Customers.FindAsync(id);
             if (customer == null) return NotFound();
@@ -62,9 +62,9 @@ namespace GaragePRO.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Email,Phone")] Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FullName,Email,Phone,Address,City,PostalCode")] Customer customer)
         {
-            if (id != customer.Id) return NotFound();
+            if (id != customer.Id) return BadRequest();
             if (ModelState.IsValid)
             {
                 try
@@ -86,7 +86,7 @@ namespace GaragePRO.Controllers
 
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return BadRequest();
             var customer = await _context.Customers
                 .FirstOrDefaultAsync(c => c.Id == id);
             if (customer == null) return NotFound();
