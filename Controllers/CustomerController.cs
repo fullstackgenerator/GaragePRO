@@ -16,8 +16,8 @@ namespace GaragePRO.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var customers = await _context.Customers.ToListAsync();
-            return View(customers);
+            var customer = await _context.Customers.ToListAsync();
+            return View(customer);
         }
 
         public async Task<IActionResult> Details(int? id)
