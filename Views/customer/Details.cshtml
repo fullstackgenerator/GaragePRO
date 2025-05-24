@@ -8,16 +8,36 @@
 <h2>Customer Details</h2>
 
 <table class="table table-bordered mt-3">
-    <tr><th>Full Name</th><td>@Model.FullName</td></tr>
-    <tr><th>Address</th><td>@Model.Address</td></tr>
-    <tr><th>City</th><td>@Model.City</td></tr>
-    <tr><th>Postal Code</th><td>@Model.PostalCode</td></tr>
-    <tr><th>Phone</th><td>@Model.Phone</td></tr>
-    <tr><th>Email</th><td>@Model.Email</td></tr>
+    <tr>
+        <th>Full Name</th>
+        <td>@Model.FullName</td>
+    </tr>
+    <tr>
+        <th>Address</th>
+        <td>@Model.Address</td>
+    </tr>
+    <tr>
+        <th>City</th>
+        <td>@Model.City</td>
+    </tr>
+    <tr>
+        <th>Postal Code</th>
+        <td>@Model.PostalCode</td>
+    </tr>
+    <tr>
+        <th>Phone</th>
+        <td>@Model.Phone</td>
+    </tr>
+    <tr>
+        <th>Email</th>
+        <td>@Model.Email</td>
+    </tr>
 </table>
 
 <div class="mt-3">
-    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
-    <a class="btn btn-secondary" asp-action="Index">Back to List</a>
+    <a class="btn btn-outline-success" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+    <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-inline">
+        <button type="submit" class="btn btn-outline-danger">Delete</button>
+    </form>
+    <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
 </div>

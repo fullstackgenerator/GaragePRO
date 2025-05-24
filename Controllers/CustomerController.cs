@@ -84,15 +84,6 @@ namespace GaragePRO.Controllers
             return View(customer);
         }
 
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null) return BadRequest();
-            var customer = await _context.Customers
-                .FirstOrDefaultAsync(c => c.Id == id);
-            if (customer == null) return NotFound();
-            return View(customer);
-        }
-
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
