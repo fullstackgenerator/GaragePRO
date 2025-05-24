@@ -25,6 +25,7 @@ namespace GaragePRO.Controllers
             if (id == null) return BadRequest();
 
             var customer = await _context.Customers
+                .Include(c => c.Vehicles)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             if (customer == null) return NotFound();

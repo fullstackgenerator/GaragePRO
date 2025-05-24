@@ -4,8 +4,20 @@
     ViewBag.Title = "Customer Details";
     Layout = "_Layout";
 }
+<div class="row my-3">
+<div class="col-md-12">
+    <div class="d-flex align-items-center gap-3 mb-2">
+        <h4 class="mb-0">Customer Details</h4>
+        <a class="btn btn-outline-success" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+        <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-inline">
+            <button type="submit" class="btn btn-outline-danger">Delete</button>
+        </form>
+        <a class="btn btn-outline-secondary" asp-action="Index">Back</a>
+    </div>
 
-<h2>Customer Details</h2>
+</div>
+</div>
+
 
 <table class="table table-bordered mt-3">
     <tr>
@@ -34,10 +46,41 @@
     </tr>
 </table>
 
-<div class="mt-3">
-    <a class="btn btn-outline-success" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-    <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-inline">
-        <button type="submit" class="btn btn-outline-danger">Delete</button>
-    </form>
-    <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
+
+
+<div class="row my-3">
+    <div class="col-md-12">
+
+        <div class="d-flex align-items-center gap-3 mb-2">
+            <h4 class="mb-0">Vehicle Details</h4>
+            <a class="btn btn-success" asp-controller="Vehicle" asp-action="Create" asp-route-customerId="@Model.Id">
+                + Add New Vehicle
+            </a>
+        </div>
+
+        <table class="table table-bordered mt-3">
+            <thread>
+                <tr>
+                    <th>Make</th>
+                    <th>Model</th>
+                    <th>Year</th>
+                    <th>VIN</th>
+                    <th>Mileage</th>
+                </tr>
+            </thread>
+            <tbody>
+            @foreach (var vehicle in Model.Vehicles)
+            {
+                <tr>
+                    <th>@vehicle.make</th>
+                    <th>@vehicle.model</th>
+                    <th>@vehicle.year</th>
+                    <th>@vehicle.VIN</th>
+                    <th>@vehicle.mileage</th>
+                </tr>
+            }
+            </tbody>
+
+        </table>
+    </div>
 </div>
