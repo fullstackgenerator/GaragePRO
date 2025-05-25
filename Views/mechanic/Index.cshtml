@@ -1,0 +1,35 @@
+﻿@model IEnumerable<GaragePRO.Models.Mechanic>
+
+@{
+    ViewBag.Title = "Mechanic";
+    Layout = "_Layout";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4>Mechanics</h4>
+    <a class="btn btn-success" asp-action="Create">+ Add New Mechanic</a>
+</div>
+
+<table class="table table-striped table-bordered table-hover">
+    <thead class="table-dark">
+    <tr>
+        <th>Full Name</th>
+        <th>Status</th>
+        <th>Assigned Vehicle Brand</th>
+        <th style="width: 180px;">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var mechanic in Model)
+    {
+        <tr>
+            <td>@mechanic.FullName</td>
+            <td>@mechanic.Status</td>
+            <td>@mechanic.AssignedVehicleBrand</td>
+            <td>
+                <a class="btn btn-primary btn-sm me-1" asp-action="Details" asp-route-id="@mechanic.Id">Details</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

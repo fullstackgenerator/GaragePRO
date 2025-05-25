@@ -1,0 +1,45 @@
+﻿@model GaragePRO.Models.Mechanic
+
+@{
+    ViewBag.Title = "Mechanic Details";
+    Layout = "_Layout";
+}
+
+<h2>Edit Mechanic Details</h2>
+
+<form asp-action="Edit" method="post" class="mt-4">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <input asp-for="FullName" class="form-control" placeholder="Full Name"/>
+            <span asp-validation-for="FullName" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <input asp-for="AssignedVehicleBrand" class="form-control" placeholder="Assigned vehicle brand"/>
+            <span asp-validation-for="AssignedVehicleBrand" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <input asp-for="Seniority" class="form-control" placeholder="Seniority"/>
+            <span asp-validation-for="Seniority" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <input asp-for="EmploymentStartYear" class="form-control" placeholder="Employment start year"/>
+            <span asp-validation-for="EmploymentStartYear" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <select asp-for="Status" class="form-control" asp-items="Html.GetEnumSelectList<Status>()"></select>
+            <span asp-validation-for="Status" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <input asp-for="Phone" class="form-control" placeholder="Phone"/>
+            <span asp-validation-for="Phone" class="text-danger"></span>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-outline-primary">Confirm edit</button>
+    <a href="/mechanic" class="btn btn-outline-dark">Cancel</a>
+</form>

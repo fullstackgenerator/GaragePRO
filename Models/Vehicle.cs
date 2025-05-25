@@ -34,4 +34,5 @@ public class Vehicle
     public int Mileage { get; set; }
 
     public ICollection<WorkOrder>? WorkOrders { get; set; }
+
 }
