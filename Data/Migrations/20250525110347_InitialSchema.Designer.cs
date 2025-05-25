@@ -3,6 +3,7 @@ using System;
 using GaragePRO.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GaragePRO.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250525110347_InitialSchema")]
+    partial class InitialSchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.5");
@@ -209,36 +212,36 @@ namespace GaragePRO.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Make")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Mileage")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Model")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("VIN")
                         .IsRequired()
                         .HasMaxLength(17)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Year")
+                    b.Property<int>("customerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("make")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("mileage")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("model")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("year")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
-
                     b.HasIndex("VIN")
                         .IsUnique();
+
+                    b.HasIndex("customerId");
 
                     b.ToTable("Vehicles");
                 });
@@ -519,13 +522,13 @@ namespace GaragePRO.Data.Migrations
 
             modelBuilder.Entity("GaragePRO.Models.Vehicle", b =>
                 {
-                    b.HasOne("GaragePRO.Models.Customer", "Customer")
+                    b.HasOne("GaragePRO.Models.Customer", "customer")
                         .WithMany("Vehicles")
-                        .HasForeignKey("CustomerId")
+                        .HasForeignKey("customerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customer");
+                    b.Navigation("customer");
                 });
 
             modelBuilder.Entity("GaragePRO.Models.WorkOrder", b =>

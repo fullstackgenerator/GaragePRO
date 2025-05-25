@@ -5,7 +5,8 @@
     Layout = "_Layout";
 }
 <form asp-action="Create" method="post" class="mt-4">
-
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @Html.AntiForgeryToken()
     <div class="row mb-3">
         <div class="col-md-6">
             <input asp-for="FullName" class="form-control" placeholder="Full Name"/>

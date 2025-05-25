@@ -1,36 +1,62 @@
 ﻿@model GaragePRO.Models.Vehicle
 
 @{
-    ViewBag.Title = "Vehicles";
+    ViewBag.Title = "Add Vehicle";
     Layout = "_Layout";
 }
-<form asp-action="Create" method="post" class="mt-4">
-    <input type="hidden" asp-for="customerId" />
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <input asp-for="make" class="form-control" placeholder="Make"/>
-            <span asp-validation-for="make" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <input asp-for="model" class="form-control" placeholder="Model"/>
-            <span asp-validation-for="model" class="text-danger"></span>
-        </div>
+
+<div class="card">
+    <div class="card-header">
+        <h4>Add New Vehicle</h4>
     </div>
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <input asp-for="year" class="form-control" placeholder="Year"/>
-            <span asp-validation-for="year" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <input asp-for="VIN" class="form-control" placeholder="VIN"/>
-            <span asp-validation-for="VIN" class="text-danger"></span>
-        </div>
+    <div class="card-body">
+        <form asp-action="Create" method="post" class="mt-4">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="CustomerId" value="@ViewBag.CustomerId" /> 
+            
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label asp-for="Make" class="form-label"></label>
+                    <input asp-for="Make" class="form-control" />
+                    <span asp-validation-for="Make" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Model" class="form-label"></label>
+                    <input asp-for="Model" class="form-control" />
+                    <span asp-validation-for="Model" class="text-danger"></span>
+                </div>
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label asp-for="Year" class="form-label"></label>
+                    <input asp-for="Year" class="form-control" />
+                    <span asp-validation-for="Year" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="VIN" class="form-label"></label>
+                    <input asp-for="VIN" class="form-control" />
+                    <span asp-validation-for="VIN" class="text-danger"></span>
+                </div>
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label asp-for="Mileage" class="form-label"></label>
+                    <input asp-for="Mileage" class="form-control" />
+                    <span asp-validation-for="Mileage" class="text-danger"></span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Create</button>
+                <a asp-controller="Customer" asp-action="Details" asp-route-id="@Model.CustomerId" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
     </div>
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <input asp-for="mileage" class="form-control" placeholder="Mileage"/>
-            <span asp-validation-for="mileage" class="text-danger"></span>
-        </div>
-    </div>
-    <button type="submit" class="btn btn-outline-primary">Create</button>
-</form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
