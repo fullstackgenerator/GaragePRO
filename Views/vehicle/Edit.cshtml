@@ -1,0 +1,40 @@
+﻿@model GaragePRO.Models.Vehicle
+
+@{
+    ViewBag.Title = "Customer Details";
+    Layout = "_Layout";
+}
+
+<h2>Edit Vehicle Details</h2>
+
+<form asp-action="Edit" method="post" class="mt-4">
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <input asp-for="make" class="form-control" placeholder="Make"/>
+            <span asp-validation-for="make" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <input asp-for="model" class="form-control" placeholder="Model"/>
+            <span asp-validation-for="model" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <input asp-for="year" class="form-control" placeholder=">ear"/>
+            <span asp-validation-for="year" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <input asp-for="VIN" class="form-control" placeholder="VIN"/>
+            <span asp-validation-for="VIN" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <input asp-for="mileage" class="form-control" placeholder="mileage"/>
+            <span asp-validation-for="mileage" class="text-danger"></span>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-outline-primary">Confirm edit</button>
+    <a href="/customer" class="btn btn-outline-dark">Cancel</a>
+</form>
