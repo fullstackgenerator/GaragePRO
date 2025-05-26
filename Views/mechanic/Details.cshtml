@@ -20,7 +20,7 @@
             <br>
             <strong>Start of employment:</strong> @Model.EmploymentStartYear
             <br>
-            <strong>Status:</strong>@Model.Status
+            <strong>Status: </strong>@Model.Status
             <br>
             <strong>Phone:</strong> @Model.Phone
         </p>
@@ -36,14 +36,9 @@
     <table class="table table-striped table-bordered">
         <thead>
         <tr>
+            <th>Work Order Number</th>
             <th>Vehicle</th>
-            <th>Mechanic</th>
-            <th>DateIn</th>
-            <th>DateOut</th>
-            <th>Notes</th>
-            <th>Created at</th>
-            <th>Service Details</th>
-            <th>Parts Used</th>
+            <th>Scheduled</th>
         </tr>
         </thead>
         <tbody>
@@ -51,22 +46,15 @@
         {
             <tr>
                 <td>
-                    <a asp-controller="Vehicle" asp-action="Details" asp-route-id="@workOrder.Vehicle.Id">
-                        @workOrder.Vehicle.Make @workOrder.Vehicle.Model
+                    <a asp-controller="WorkOrder" asp-action="Details" asp-route-id="@workOrder.Id">
+                        @workOrder.Id
                     </a>
                 </td>
-
-                <td>@workOrder.Mechanic.FullName</td>
-                <td>@workOrder.DateIn</td>
-                <td>@workOrder.DateOut</td>
-                <td>@workOrder.Notes</td>
-                <td>@workOrder.CreatedAt</td>
-                <td>@workOrder.ServiceDetails</td>
-                <td>@workOrder.PartsUsed</td>
                 <td>
-                    <a class="btn btn-primary btn-sm" asp-controller="WorkOrder" asp-action="Edit"
-                       asp-route-id="@workOrder.Id">Edit</a>
+                   @workOrder.Vehicle.Make @workOrder.Vehicle.Model
                 </td>
+
+                <td>@workOrder.DateIn</td>
             </tr>
         }
         </tbody>
