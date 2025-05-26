@@ -14,12 +14,12 @@
     <div class="row mb-3">
         <div class="col-md-6">
             <label>Work Order Start</label>
-            <input asp-for="DateIn" class="form-control"/>
+            <input asp-for="DateIn" type="date" class="form-control"/>
             <span asp-validation-for="DateIn" class="text-danger"></span>
         </div>
         <div class="col-md-6">
             <label>Work Order Finish</label>
-            <input asp-for="DateOut" class="form-control"/>
+            <input asp-for="DateOut" type="date" class="form-control"/>
             <span asp-validation-for="DateOut" class="text-danger"></span>
         </div>
     </div>
