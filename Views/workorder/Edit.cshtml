@@ -1,44 +1,56 @@
-﻿@model GaragePRO.Models.Customer
+﻿@model GaragePRO.Models.WorkOrder
 
 @{
-    ViewBag.Title = "Customer Details";
+    ViewBag.Title = "Edit Work Order";
     Layout = "_Layout";
 }
-
-<h2>Edit Customer Details</h2>
-
+<h4>Edit Work Order</h4>
 <form asp-action="Edit" method="post" class="mt-4">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="CreatedAt" />
 
     <div class="row mb-3">
         <div class="col-md-6">
-            <input asp-for="FullName" class="form-control" placeholder="Full Name"/>
-            <span asp-validation-for="FullName" class="text-danger"></span>
+            <label>Work Order Start</label>
+            <input asp-for="DateIn" class="form-control"/>
+            <span asp-validation-for="DateIn" class="text-danger"></span>
         </div>
         <div class="col-md-6">
-            <input asp-for="Address" class="form-control" placeholder="Address"/>
-            <span asp-validation-for="Address" class="text-danger"></span>
+            <label>Work Order Finish</label>
+            <input asp-for="DateOut" class="form-control"/>
+            <span asp-validation-for="DateOut" class="text-danger"></span>
         </div>
     </div>
     <div class="row mb-3">
         <div class="col-md-6">
-            <input asp-for="City" class="form-control" placeholder="City"/>
-            <span asp-validation-for="City" class="text-danger"></span>
+            <label>Vehicle</label>
+            <select asp-for="VehicleId" class="form-control" id="vehicle-select" name="VehicleId" data-selected-id="@Model.VehicleId"></select>
+            <span asp-validation-for="VehicleId" class="text-danger"></span>
         </div>
         <div class="col-md-6">
-            <input asp-for="PostalCode" class="form-control" placeholder="Postal Code"/>
-            <span asp-validation-for="PostalCode" class="text-danger"></span>
+            <label>Mechanic</label>
+            <select asp-for="MechanicId" class="form-control" id="mechanic-select" name="MechanicId" data-selected-id="@Model.MechanicId"></select>
+            <span asp-validation-for="MechanicId" class="text-danger"></span>
         </div>
     </div>
     <div class="row mb-3">
         <div class="col-md-6">
-            <input asp-for="Phone" class="form-control" placeholder="Phone"/>
-            <span asp-validation-for="Phone" class="text-danger"></span>
+            <label>Notes</label>
+            <input asp-for="Notes" class="form-control"/>
+            <span asp-validation-for="Notes" class="text-danger"></span>
         </div>
         <div class="col-md-6">
-            <input asp-for="Email" class="form-control" placeholder="Email"/>
-            <span asp-validation-for="Email" class="text-danger"></span>
+            <label>Order status</label>
+            <select asp-for="Status" asp-items="Html.GetEnumSelectList<WorkOrderStatus>()" class="form-control"></select>
+            <span asp-validation-for="Status" class="text-danger"></span>
         </div>
     </div>
-    <button type="submit" class="btn btn-outline-primary">Confirm edit</button>
-    <a href="/customer" class="btn btn-outline-dark">Cancel</a>
+    <button type="submit" class="btn btn-outline-primary">Save Changes</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    }

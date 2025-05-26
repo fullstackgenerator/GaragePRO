@@ -1,6 +1,7 @@
 ﻿using GaragePRO.Data;
 using GaragePRO.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -61,8 +62,9 @@ public class WorkOrderController : Controller
             return RedirectToAction(nameof(Index));
         }
 
-        ViewBag.Mechanics = _context.Mechanics.ToList();
-        ViewBag.Vehicles = _context.Vehicles.ToList();
+        ViewBag.Mechanics = new SelectList(_context.Mechanics, "Id", "FullName");
+        ViewBag.Vehicles = new SelectList(_context.Vehicles, "Id", "VIN");
+
         return View(workOrder);
     }
 
@@ -112,5 +114,24 @@ public class WorkOrderController : Controller
         _context.WorkOrders.Remove(workOrder);
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
+    }
+    
+    public async Task<IActionResult> SearchMechanics(string term)
+    {
+        var results = await _context.Mechanics
+            .Where(m => m.FullName.Contains(term) || m.AssignedVehicleBrand.Contains(term))
+            .Select(m => new { id = m.Id, text = m.FullName + " (" + m.AssignedVehicleBrand + ")" })
+            .ToListAsync();
+
+        return Json(results);
+    }
+
+    public async Task<IActionResult> SearchVehicles(string term)
+    {
+        var results = await _context.Vehicles
+            .Where(v => v.VIN.Contains(term) || v.Make.Contains(term) || v.Model.Contains(term))
+            .Select(v => new { id = v.Id, text = v.VIN + " - " + v.Make + " " + v.Model })
+            .ToListAsync();
+        return Json(results);
     }
 }

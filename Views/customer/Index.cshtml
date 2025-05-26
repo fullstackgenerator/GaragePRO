@@ -15,6 +15,7 @@
     <tr>
         <th>Full Name</th>
         <th>Postal Code</th>
+        <th>City</th>
         <th style="width: 180px;">Actions</th>
     </tr>
     </thead>
@@ -24,6 +25,7 @@
         <tr>
             <td>@customer.FullName</td>
             <td>@customer.PostalCode</td>
+            <td>@customer.City</td>
             <td>
                 <a class="btn btn-primary btn-sm me-1" asp-action="Details" asp-route-id="@customer.Id">Details</a>
             </td>

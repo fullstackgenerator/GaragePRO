@@ -1,31 +1,45 @@
-﻿@model IEnumerable<GaragePRO.Models.Customer>
+﻿@model IEnumerable<GaragePRO.Models.WorkOrder>
 
 @{
-    ViewBag.Title = "Customers";
+    ViewBag.Title = "Work Orders";
     Layout = "_Layout";
 }
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h4>Customers</h4>
-    <a class="btn btn-success" asp-action="Create">+ Add New Customer</a>
+    <h4>Work Orders</h4>
+    <a class="btn btn-success" asp-action="Create">+ Add new Work Order</a>
 </div>
 
 <table class="table table-striped table-bordered table-hover">
     <thead class="table-dark">
     <tr>
-        <th>Full Name</th>
-        <th>Postal Code</th>
+        <th>Work Order ID</th>
+        <th>Date issued</th>
+        <th>Status</th>
+        <th>Mechanic</th>
+        <th>VIN</th>
+        <th>Make</th>
+        <th>Model</th>
+        <th>Year</th>
+
         <th style="width: 180px;">Actions</th>
     </tr>
     </thead>
     <tbody>
-    @foreach (var customer in Model)
+    @foreach (var workOrder in Model)
     {
         <tr>
-            <td>@customer.FullName</td>
-            <td>@customer.PostalCode</td>
+            <td>@workOrder.Id</td>
+            <td>@workOrder.DateIn</td>
+            <td>@workOrder.Status</td>
+            <td>@workOrder.Mechanic.FullName</td>
+            <td>@workOrder.Vehicle.VIN</td>
+            <td>@workOrder.Vehicle.Make</td>
+            <td>@workOrder.Vehicle.Model</td>
+            <td>@workOrder.Vehicle.Year</td>
+
             <td>
-                <a class="btn btn-primary btn-sm me-1" asp-action="Details" asp-route-id="@customer.Id">Details</a>
+                <a class="btn btn-primary btn-sm me-1" asp-action="Details" asp-route-id="@workOrder.Id">Details</a>
             </td>
         </tr>
     }
