@@ -1,10 +1,13 @@
-﻿namespace GaragePRO.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace GaragePRO.Models;
 
 public class ServiceDetail
 {
     public int Id { get; set; }
 
     public int WorkOrderId { get; set; }
+    [ForeignKey("WorkOrderId")]
     public WorkOrder WorkOrder { get; set; }
 
     public string Description { get; set; }

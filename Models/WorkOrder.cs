@@ -19,7 +19,7 @@ public class WorkOrder
 
     public ICollection<ServiceDetail> ServiceDetails { get; set; }
     public ICollection<PartUsed> PartsUsed { get; set; }
-    public Invoice Invoice { get; set; }
+    public Invoice? Invoice { get; set; }
 }
 
 public enum WorkOrderStatus
