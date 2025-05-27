@@ -92,7 +92,7 @@ else
     <table class="table table-bordered">
         <thead>
         <tr>
-            @* <th>Part</th> *@
+            <th>Part Name</th>
             <th>Quantity</th>
             <th>Date Used</th>
         </tr>
@@ -101,7 +101,7 @@ else
         @foreach (var part in Model.PartsUsed)
         {
             <tr>
-                @* <td>@part.PartCatalog.Name</td> *@
+                <td>@part.PartCatalog.PartName</td>
                 <td>@part.Quantity</td>
                 <td>@part.CreatedAt.ToShortDateString()</td>
             </tr>
