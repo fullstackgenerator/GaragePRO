@@ -48,7 +48,7 @@ public class MechanicController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-[HttpGet]
+    [HttpGet]
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null) return BadRequest();
