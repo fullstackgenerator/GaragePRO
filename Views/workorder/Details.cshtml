@@ -29,3 +29,75 @@
         </p>
     </div>
 </div>
+
+<div class="d-flex justify-content-between align-items-center mb-2">
+    <h4>Service Detail</h4>
+    <a asp-controller="ServiceDetail" asp-action="Create" asp-route-workOrderId="@Model.Id" class="btn btn-sm btn-success">
+        + Add Service Detail
+    </a>
+</div>
+
+@if (Model.ServiceDetails != null && Model.ServiceDetails.Any())
+{
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Description</th>
+            <th>Labor Hours</th>
+            <th>Rate</th>
+            <th>Total</th>
+            <th>Created</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var detail in Model.ServiceDetails)
+        {
+            <tr>
+                <td>@detail.Description</td>
+                <td>@detail.LaborHours</td>
+                <td>@detail.HourlyRate.ToString("C")</td>
+                <td>@(detail.LaborHours * detail.HourlyRate).ToString("C")</td>
+                <td>@detail.CreatedAt.ToShortDateString()</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-warning">No service details recorded yet.</div>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-2">
+    <h4>Parts Used</h4>
+    <a asp-controller="PartUsed" asp-action="Create" asp-route-workOrderId="@Model.Id" class="btn btn-sm btn-success">
+        + Add Part
+    </a>
+</div>
+
+@if (Model.PartsUsed != null && Model.PartsUsed.Any())
+{
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            @* <th>Part</th> *@
+            <th>Quantity</th>
+            <th>Date Used</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var part in Model.PartsUsed)
+        {
+            <tr>
+                @* <td>@part.PartCatalog.Name</td> *@
+                <td>@part.Quantity</td>
+                <td>@part.CreatedAt.ToShortDateString()</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">No parts recorded for this work order.</div>
+}
