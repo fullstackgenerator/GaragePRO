@@ -55,8 +55,8 @@
             <tr>
                 <td>@detail.Description</td>
                 <td>@detail.LaborHours</td>
-                <td>@detail.HourlyRate.ToString("C")</td>
-                <td>@(detail.LaborHours * detail.HourlyRate).ToString("C")</td>
+                <td>@detail.HourlyRate.ToString()€</td>
+                <td>@(detail.LaborHours * detail.HourlyRate)€</td>
                 <td>@detail.CreatedAt.ToShortDateString()</td>
             </tr>
         }

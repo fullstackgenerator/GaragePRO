@@ -9,11 +9,11 @@ public class ServiceDetail
 
     public int WorkOrderId { get; set; }
     [ForeignKey("WorkOrderId")]
-    public WorkOrder WorkOrder { get; set; }
+    public WorkOrder? WorkOrder { get; set; }
 
     [Required]
     [StringLength(250)]
-    public string Description { get; set; }
+    public string? Description { get; set; }
     [Required]
     public decimal LaborHours { get; set; }
     [Required]
