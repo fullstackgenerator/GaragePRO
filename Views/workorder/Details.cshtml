@@ -47,6 +47,7 @@
             <th>Rate</th>
             <th>Total</th>
             <th>Created</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -58,6 +59,13 @@
                 <td>@detail.HourlyRate.ToString()€</td>
                 <td>@(detail.LaborHours * detail.HourlyRate)€</td>
                 <td>@detail.CreatedAt.ToShortDateString()</td>
+                <td><a class="btn btn-primary btn-sm me-1" asp-controller="ServiceDetail" asp-action="Edit" asp-route-id="@detail.Id">Edit</a>
+
+                    <br/>  <form asp-controller="ServiceDetail" asp-action="DeleteServiceDetailConfirmed" asp-route-id="@detail.Id" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                        @Html.AntiForgeryToken()
+                    </form>
+                </td>
             </tr>
         }
         </tbody>
