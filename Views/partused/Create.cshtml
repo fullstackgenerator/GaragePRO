@@ -1,0 +1,24 @@
+﻿@model GaragePRO.Models.PartUsed
+
+@{
+    ViewBag.Title = "Parts Used";
+    Layout = "_Layout";
+}
+
+<form asp-action="Create">
+    <input type="hidden" asp-for="WorkOrderId" />
+    
+    <div class="form-group">
+        <label asp-for="PartCatalogId"></label>
+        <select asp-for="PartCatalogId" asp-items="ViewBag.PartCatalogs" class="form-control">
+            <option value="">-- Select Part --</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Quantity"></label>
+        <input asp-for="Quantity" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Add Part</button>
+</form>

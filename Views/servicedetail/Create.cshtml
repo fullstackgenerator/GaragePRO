@@ -1,5 +1,10 @@
 ﻿@model GaragePRO.Models.ServiceDetail
 
+@{
+    ViewBag.Title = "Service Details";
+    Layout = "_Layout";
+}
+
 <form asp-action="Create" method="post">
     <input type="hidden" asp-for="WorkOrderId" />
 
