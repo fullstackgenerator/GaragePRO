@@ -95,6 +95,7 @@ else
             <th>Part Name</th>
             <th>Part Price</th>
             <th>Quantity</th>
+            <th>Total</th>
             <th>Date</th>
             <th>Actions</th>
         </tr>
@@ -106,6 +107,7 @@ else
                 <td>@part.PartCatalog.PartName</td>
                 <td>@part.PartCatalog.PartPrice</td>
                 <td>@part.Quantity</td>
+                <td>@(part.Quantity * part.PartCatalog.PartPrice)€</td>
                 <td>@part.CreatedAt.ToShortDateString()</td>
                 <td>
                     <div class="d-flex gap-2 align-items-center">
@@ -120,7 +122,16 @@ else
                 </td>
             </tr>
         }
-        </tbody>
+    
+    <tr>
+        <td colspan="3" class="text-end"><strong>Total Parts Cost:</strong></td>
+        <td colspan="3">
+            <strong>
+                @Model.PartsUsed.Sum(p => p.Quantity * p.PartCatalog.PartPrice)€
+            </strong>
+        </td>
+    </tr>
+    </tbody>
     </table>
 }
 else
