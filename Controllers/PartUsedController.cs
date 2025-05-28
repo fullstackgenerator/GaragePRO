@@ -26,9 +26,13 @@ public class PartUsedController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("WorkOrderId,PartCatalogId,Quantity,CreatedAt")]
-            PartUsed partUsed) 
+        PartUsed partUsed)
     {
-        if (!ModelState.IsValid) return View(partUsed);
+        if (!ModelState.IsValid)
+        {
+            ViewBag.PartCatalogs = new SelectList(_context.PartCatalogs, "Id", "PartName", partUsed.PartCatalogId);
+            return View(partUsed);
+        }
 
         partUsed.CreatedAt = DateTime.Now;
         _context.PartUsed.Add(partUsed);
@@ -36,11 +40,14 @@ public class PartUsedController : Controller
         return RedirectToAction("Details", "WorkOrder", new { id = partUsed.WorkOrderId });
     }
 
+
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null) return NotFound();
         var partUsed = await _context.PartUsed.FindAsync(id);
         if (partUsed == null) return NotFound();
+
+        ViewBag.PartCatalogs = new SelectList(_context.PartCatalogs, "Id", "PartName", partUsed.PartCatalogId);
         return View(partUsed);
     }
     

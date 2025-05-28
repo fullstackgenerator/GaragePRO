@@ -10,12 +10,14 @@
     @Html.AntiForgeryToken()
     <input type="hidden" asp-for="Id" />
     <input type="hidden" asp-for="CreatedAt" />
+    <input type="hidden" asp-for="WorkOrderId" />
 
     <div class="row mb-3">
         <div class="col-md-6">
-            <label>Work Order Start</label>
-            <input asp-for="PartCatalogId" class="form-control"/>
-            <option value="">-- Select Part --</option>
+            <label asp-for="PartCatalogId"></label>
+            <select asp-for="PartCatalogId" asp-items="ViewBag.PartCatalogs" class="form-control">
+                <option value="">-- Select Part --</option>
+            </select>
             <span asp-validation-for="PartCatalogId" class="text-danger"></span>
         </div>
         <div class="col-md-6">

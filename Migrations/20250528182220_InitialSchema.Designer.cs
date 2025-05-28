@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace GaragePRO.Data.Migrations
+namespace GaragePRO.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250524161504_RemoveVehicleSelfReference")]
-    partial class RemoveVehicleSelfReference
+    [Migration("20250528182220_InitialSchema")]
+    partial class InitialSchema
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -112,16 +112,31 @@ namespace GaragePRO.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("createdAt")
+                    b.Property<string>("AssignedVehicleBrand")
+                        .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("fullName")
+                    b.Property<int>("EmploymentStartYear")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("FullName")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("phone")
+                    b.Property<string>("Phone")
                         .IsRequired()
+                        .HasMaxLength(30)
                         .HasColumnType("TEXT");
+
+                    b.Property<string>("Seniority")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -188,6 +203,7 @@ namespace GaragePRO.Data.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasMaxLength(250)
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("HourlyRate")
@@ -212,33 +228,36 @@ namespace GaragePRO.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Make")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Mileage")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Model")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("VIN")
                         .IsRequired()
+                        .HasMaxLength(17)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("customerId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("make")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("mileage")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("model")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("year")
+                    b.Property<int>("Year")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CustomerId");
+
                     b.HasIndex("VIN")
                         .IsUnique();
-
-                    b.HasIndex("customerId");
 
                     b.ToTable("Vehicles");
                 });
@@ -262,7 +281,6 @@ namespace GaragePRO.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Notes")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Status")
@@ -519,13 +537,13 @@ namespace GaragePRO.Data.Migrations
 
             modelBuilder.Entity("GaragePRO.Models.Vehicle", b =>
                 {
-                    b.HasOne("GaragePRO.Models.Customer", "customer")
+                    b.HasOne("GaragePRO.Models.Customer", "Customer")
                         .WithMany("Vehicles")
-                        .HasForeignKey("customerId")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("customer");
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("GaragePRO.Models.WorkOrder", b =>
@@ -620,8 +638,7 @@ namespace GaragePRO.Data.Migrations
 
             modelBuilder.Entity("GaragePRO.Models.WorkOrder", b =>
                 {
-                    b.Navigation("Invoice")
-                        .IsRequired();
+                    b.Navigation("Invoice");
 
                     b.Navigation("PartsUsed");
 

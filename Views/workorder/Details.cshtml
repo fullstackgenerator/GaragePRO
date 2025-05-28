@@ -93,8 +93,10 @@ else
         <thead>
         <tr>
             <th>Part Name</th>
+            <th>Part Price</th>
             <th>Quantity</th>
-            <th>Date Used</th>
+            <th>Date</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -102,8 +104,20 @@ else
         {
             <tr>
                 <td>@part.PartCatalog.PartName</td>
+                <td>@part.PartCatalog.PartPrice</td>
                 <td>@part.Quantity</td>
                 <td>@part.CreatedAt.ToShortDateString()</td>
+                <td>
+                    <div class="d-flex gap-2 align-items-center">
+                        <a class="btn btn-primary btn-sm" asp-controller="PartUsed" asp-action="Edit" asp-route-id="@part.Id">Edit</a>
+
+                        <form asp-controller="PartUsed" asp-action="Delete" asp-route-id="@part.Id" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            @Html.AntiForgeryToken()
+                        </form>
+                    </div>
+
+                </td>
             </tr>
         }
         </tbody>

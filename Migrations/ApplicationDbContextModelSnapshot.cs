@@ -3,19 +3,16 @@ using System;
 using GaragePRO.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace GaragePRO.Data.Migrations
+namespace GaragePRO.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250525170630_AddMechanicEntity")]
-    partial class AddMechanicEntity
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.5");
@@ -203,6 +200,7 @@ namespace GaragePRO.Data.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasMaxLength(250)
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("HourlyRate")
@@ -280,7 +278,6 @@ namespace GaragePRO.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Notes")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Status")
@@ -638,8 +635,7 @@ namespace GaragePRO.Data.Migrations
 
             modelBuilder.Entity("GaragePRO.Models.WorkOrder", b =>
                 {
-                    b.Navigation("Invoice")
-                        .IsRequired();
+                    b.Navigation("Invoice");
 
                     b.Navigation("PartsUsed");
 
