@@ -17,7 +17,7 @@
         </div>
         <div class="col-md-6">
             <label asp-for="WorkOrderId" class="form-label">Work Order</label>
-            <select asp-for="WorkOrderId" class="form-select" asp-items="@(new SelectList(ViewBag.WorkOrders, "Id", "Label"))">
+            <select asp-for="WorkOrderId" id="WorkOrderId" class="form-select" asp-items="@(new SelectList(ViewBag.WorkOrders, "Id", "Label"))">
                 <option value="">-- Select Work Order --</option>
             </select>
             <span asp-validation-for="WorkOrderId" class="text-danger"></span>
@@ -27,12 +27,12 @@
     <div class="row mb-3">
         <div class="col-md-6">
             <label asp-for="SubTotal" class="form-label"></label>
-            <input asp-for="SubTotal" class="form-control" />
+            <input asp-for="SubTotal" class="form-control" id="SubTotal" readonly />
             <span asp-validation-for="SubTotal" class="text-danger"></span>
         </div>
         <div class="col-md-6">
             <label asp-for="TaxAmount" class="form-label"></label>
-            <input asp-for="TaxAmount" class="form-control" />
+            <input asp-for="TaxAmount" class="form-control" id="TaxAmount" readonly />
             <span asp-validation-for="TaxAmount" class="text-danger"></span>
         </div>
     </div>
@@ -40,12 +40,12 @@
     <div class="row mb-3">
         <div class="col-md-6">
             <label asp-for="Total" class="form-label"></label>
-            <input asp-for="Total" class="form-control" />
+            <input asp-for="Total" class="form-control" id="Total" readonly />
             <span asp-validation-for="Total" class="text-danger"></span>
         </div>
         <div class="col-md-6">
             <label asp-for="AmountDue" class="form-label"></label>
-            <input asp-for="AmountDue" class="form-control" />
+            <input asp-for="AmountDue" class="form-control" id="AmountDue" readonly />
             <span asp-validation-for="AmountDue" class="text-danger"></span>
         </div>
     </div>
@@ -53,7 +53,7 @@
     <div class="row mb-3">
         <div class="col-md-6">
             <label asp-for="AmountPaid" class="form-label"></label>
-            <input asp-for="AmountPaid" class="form-control" />
+            <input asp-for="AmountPaid" class="form-control" readonly />
             <span asp-validation-for="AmountPaid" class="text-danger"></span>
         </div>
         <div class="col-md-6">

@@ -71,4 +71,35 @@ $(document).ready(function () {
         "Search vehicle by VIN, make or model",
         '/WorkOrder/SearchVehicles'
     );
-});
+    
+    //autoload invoice form
+    $(document).ready(function () {
+        $('#WorkOrderId').change(function () {
+            const workOrderId = $(this).val();
+            if (!workOrderId) {
+                //clear fields if no work order is selected
+                $('#SubTotal').val('');
+                $('#TaxAmount').val('');
+                $('#Total').val('');
+                $('#AmountDue').val('');
+                return;
+            }
+            
+            $.get(`/Invoice/GetWorkOrderDetails?id=${workOrderId}`, function (data) {
+                $('#SubTotal').val(data.subTotal.toFixed(2));
+                $('#TaxAmount').val(data.tax.toFixed(2));
+                $('#Total').val(data.total.toFixed(2));
+                $('#AmountDue').val(data.amountDue.toFixed(2));
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                //error handling for the AJAX call
+                console.error("Error fetching work order details:", textStatus, errorThrown);
+                //clear fields or show an error message
+                $('#SubTotal').val('');
+                $('#TaxAmount').val('');
+                $('#Total').val('');
+                $('#AmountDue').val('');
+                alert("Could not load work order details. Please try again.");
+            });
+        });
+    });
+    });

@@ -113,4 +113,38 @@ public async Task<IActionResult> Create([Bind("InvoiceNumber,WorkOrderId,TaxAmou
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetWorkOrderDetails(int id)
+    {
+        var workOrder = await _context.WorkOrders
+            .Include(w => w.ServiceDetails)
+            .Include(w => w.PartsUsed)
+            .ThenInclude(p => p.PartCatalog)
+            .Include(w => w.Vehicle)
+            .ThenInclude(v => v.Customer)
+            .FirstOrDefaultAsync(w => w.Id == id);
+
+        if (workOrder == null) return NotFound();
+
+
+        decimal laborTotal = workOrder.ServiceDetails.Sum(s => s.LaborHours * s.HourlyRate);
+        decimal partsTotal = workOrder.PartsUsed.Sum(p => p.Quantity * p.PartCatalog.PartPrice);
+
+        decimal laborVat = laborTotal * 0.095M; // 9.5%
+        decimal partsVat = partsTotal * 0.22M; // 22%
+
+        decimal subTotal = laborTotal + partsTotal;
+        decimal tax = laborVat + partsVat;
+        decimal total = subTotal + tax;
+
+        return Json(new
+        {
+            subTotal,
+            tax,
+            total,
+            amountDue = total
+        });
+    }
+
 }
