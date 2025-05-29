@@ -20,6 +20,13 @@ public class Invoice
 
     public DateTime DateIssued { get; set; }
     public DateTime? DatePaid { get; set; }
+    
+    public ICollection<PartUsed> PartCatalog { get; set; }
+    public ICollection<ServiceDetail>? ServiceDetails { get; set; }
+    public ICollection<PartUsed>? PartsUsed { get; set; }
+    public ICollection<Customer>? Customers { get; set; }
+    public ICollection<Vehicle>? Vehicles { get; set; }
+    public ICollection<Invoice>? Invoices { get; set; }
 }
 
 public enum PaymentType
