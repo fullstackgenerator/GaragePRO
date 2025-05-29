@@ -28,8 +28,9 @@
             <td>@invoice.InvoiceNumber</td>
             <td>@invoice.WorkOrderId</td>
             <td>@invoice.DateIssued</td>
-            <td>@invoice.Customers</td>
-            <td>@invoice.Vehicles</td>
+            <td>@invoice.WorkOrder?.Vehicle?.Customer?.FullName</td>
+            <td>@invoice.WorkOrder?.Vehicle?.Make @invoice.WorkOrder?.Vehicle?.Model</td>
+
             <td>
                 <a class="btn btn-primary btn-sm me-1" asp-action="Details" asp-route-id="@invoice.Id">Details</a>
             </td>

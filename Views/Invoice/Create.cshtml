@@ -1,41 +1,98 @@
-﻿@model GaragePRO.Models.Customer
+﻿@model GaragePRO.Models.Invoice
 
 @{
-    ViewBag.Title = "Customers";
+    ViewBag.Title = "Create Invoice";
     Layout = "_Layout";
 }
+
 <form asp-action="Create" method="post" class="mt-4">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
     <div class="row mb-3">
         <div class="col-md-6">
-            <input asp-for="FullName" class="form-control" placeholder="Full Name"/>
-            <span asp-validation-for="FullName" class="text-danger"></span>
+            <label asp-for="InvoiceNumber" class="form-label"></label>
+            <input asp-for="InvoiceNumber" class="form-control" />
+            <span asp-validation-for="InvoiceNumber" class="text-danger"></span>
         </div>
         <div class="col-md-6">
-            <input asp-for="Address" class="form-control" placeholder="Address"/>
-            <span asp-validation-for="Address" class="text-danger"></span>
+            <label asp-for="WorkOrderId" class="form-label">Work Order</label>
+            <select asp-for="WorkOrderId" class="form-select" asp-items="@(new SelectList(ViewBag.WorkOrders, "Id", "Label"))">
+                <option value="">-- Select Work Order --</option>
+            </select>
+            <span asp-validation-for="WorkOrderId" class="text-danger"></span>
         </div>
     </div>
+
     <div class="row mb-3">
         <div class="col-md-6">
-            <input asp-for="City" class="form-control" placeholder="City"/>
-            <span asp-validation-for="City" class="text-danger"></span>
+            <label asp-for="SubTotal" class="form-label"></label>
+            <input asp-for="SubTotal" class="form-control" />
+            <span asp-validation-for="SubTotal" class="text-danger"></span>
         </div>
         <div class="col-md-6">
-            <input asp-for="PostalCode" class="form-control" placeholder="Postal Code"/>
-            <span asp-validation-for="PostalCode" class="text-danger"></span>
+            <label asp-for="TaxAmount" class="form-label"></label>
+            <input asp-for="TaxAmount" class="form-control" />
+            <span asp-validation-for="TaxAmount" class="text-danger"></span>
         </div>
     </div>
+
     <div class="row mb-3">
         <div class="col-md-6">
-            <input asp-for="Phone" class="form-control" placeholder="Phone"/>
-            <span asp-validation-for="Phone" class="text-danger"></span>
+            <label asp-for="Total" class="form-label"></label>
+            <input asp-for="Total" class="form-control" />
+            <span asp-validation-for="Total" class="text-danger"></span>
         </div>
         <div class="col-md-6">
-            <input asp-for="Email" class="form-control" placeholder="Email"/>
-            <span asp-validation-for="Email" class="text-danger"></span>
+            <label asp-for="AmountDue" class="form-label"></label>
+            <input asp-for="AmountDue" class="form-control" />
+            <span asp-validation-for="AmountDue" class="text-danger"></span>
         </div>
     </div>
-    <button type="submit" class="btn btn-outline-primary">Create</button>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label asp-for="AmountPaid" class="form-label"></label>
+            <input asp-for="AmountPaid" class="form-control" />
+            <span asp-validation-for="AmountPaid" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="PaymentType" class="form-label"></label>
+            <select asp-for="PaymentType" class="form-select">
+                <option value="">-- Select Payment Type --</option>
+                @foreach (var type in Enum.GetValues(typeof(GaragePRO.Models.PaymentType)))
+                {
+                    <option value="@type">@type</option>
+                }
+            </select>
+            <span asp-validation-for="PaymentType" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label asp-for="Status" class="form-label"></label>
+            <select asp-for="Status" class="form-select">
+                <option value="">-- Select Status --</option>
+                @foreach (var status in Enum.GetValues(typeof(GaragePRO.Models.InvoiceStatus)))
+                {
+                    <option value="@status">@status</option>
+                }
+            </select>
+            <span asp-validation-for="Status" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="DateIssued" class="form-label"></label>
+            <input asp-for="DateIssued" class="form-control" type="date" />
+            <span asp-validation-for="DateIssued" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DatePaid" class="form-label"></label>
+        <input asp-for="DatePaid" class="form-control" type="date" />
+        <span asp-validation-for="DatePaid" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-outline-primary">Create Invoice</button>
 </form>

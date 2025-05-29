@@ -24,8 +24,15 @@ public class InvoiceController : Controller
     {
         if (id == null) return BadRequest();
         var invoice = await _context.Invoices
-            .Include(c => c.Invoices)
-            .FirstOrDefaultAsync(c => c.Id == id);
+                .Include(i => i.WorkOrder)
+                .ThenInclude(w => w.Vehicle)
+                .ThenInclude(v => v.Customer)
+                .Include(i => i.WorkOrder)
+                .ThenInclude(w => w.ServiceDetails)
+                .Include(i => i.WorkOrder)
+                .ThenInclude(w => w.PartsUsed)
+                .ThenInclude(p => p.PartCatalog)
+                .FirstOrDefaultAsync(i => i.Id == id);
 
         if (invoice == null) return NotFound();
 
@@ -34,20 +41,33 @@ public class InvoiceController : Controller
 
     public IActionResult Create()
     {
+        ViewBag.WorkOrders = _context.WorkOrders
+            .Include(w => w.Vehicle)
+            .ThenInclude(v => v.Customer)
+            .Select(w => new
+            {
+                w.Id,
+                Label = $"#{w.Id} - {w.Vehicle.Make} {w.Vehicle.Model} ({w.Vehicle.Customer.FullName})"
+            }).ToList();
+
         return View();
     }
 
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind(
-            "InvoiceNumber,WorkOrderId,TaxAmount,SubTotal,Total,AmountDue,AmountPaid" +
-            "AmountReturned,PaymentType,Status,DateIssued,DatePaid")]
-        Invoice invoice)
+
+[HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> Create([Bind("InvoiceNumber,WorkOrderId,TaxAmount,SubTotal,Total,AmountDue,AmountPaid,PaymentType,Status,DateIssued,DatePaid")] Invoice invoice)
+{
+    if (ModelState.IsValid)
     {
         _context.Add(invoice);
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
+
+    return View(invoice);
+}
+
 
     public async Task<IActionResult> Edit(int? id)
     {
@@ -59,12 +79,10 @@ public class InvoiceController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id,
-        [Bind("Id,InvoiceNumber,WorkOrderId,TaxAmount,SubTotal,Total,AmountDue,AmountPaid\" +\n\"" +
-              "AmountReturned,PaymentType,Status,DateIssued,DatePaid")]
-        Invoice invoice)
+    public async Task<IActionResult> Edit(int id, [Bind("Id,InvoiceNumber,WorkOrderId,TaxAmount,SubTotal,Total,AmountDue,AmountPaid,PaymentType,Status,DateIssued,DatePaid")] Invoice invoice)
     {
         if (id != invoice.Id) return BadRequest();
+
         if (ModelState.IsValid)
         {
             try
@@ -74,7 +92,7 @@ public class InvoiceController : Controller
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (invoice == null) return NotFound();
+                if (!_context.Invoices.Any(e => e.Id == id)) return NotFound();
                 throw;
             }
 
@@ -83,6 +101,7 @@ public class InvoiceController : Controller
 
         return View(invoice);
     }
+
 
     [HttpPost]
     [ValidateAntiForgeryToken]

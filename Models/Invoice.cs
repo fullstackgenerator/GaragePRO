@@ -1,8 +1,11 @@
-﻿namespace GaragePRO.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace GaragePRO.Models;
 
 public class Invoice
 {
     public int Id { get; set; }
+    [Required]
     public string InvoiceNumber { get; set; }
 
     public int WorkOrderId { get; set; }
@@ -13,20 +16,13 @@ public class Invoice
     public decimal Total { get; set; }
     public decimal AmountDue { get; set; }
     public decimal AmountPaid { get; set; }
-    public decimal AmountReturned { get; set; }
-
+    [Required]
     public PaymentType PaymentType { get; set; }
+    [Required]
     public InvoiceStatus Status { get; set; }
-
+    [Required]
     public DateTime DateIssued { get; set; }
     public DateTime? DatePaid { get; set; }
-    
-    public ICollection<PartUsed> PartCatalog { get; set; }
-    public ICollection<ServiceDetail>? ServiceDetails { get; set; }
-    public ICollection<PartUsed>? PartsUsed { get; set; }
-    public ICollection<Customer>? Customers { get; set; }
-    public ICollection<Vehicle>? Vehicles { get; set; }
-    public ICollection<Invoice>? Invoices { get; set; }
 }
 
 public enum PaymentType
