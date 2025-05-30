@@ -86,6 +86,7 @@ $(document).ready(function () {
             }
             
             $.get(`/Invoice/GetWorkOrderDetails?id=${workOrderId}`, function (data) {
+                console.log("Raw data from server:", data);
                 $('#SubTotal').val(data.subTotal.toFixed(2));
                 $('#TaxAmount').val(data.tax.toFixed(2));
                 $('#Total').val(data.total.toFixed(2));

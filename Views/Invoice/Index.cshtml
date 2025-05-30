@@ -32,11 +32,15 @@
             <td>@invoice.WorkOrder?.Vehicle?.Customer?.FullName</td>
             <td>@invoice.WorkOrder?.Vehicle?.Make @invoice.WorkOrder?.Vehicle?.Model</td>
             <td>@invoice.DateIssued.ToString("dd.MM.yyyy")</td>
-            <td>@invoice.AmountDue</td>
+            <td>@invoice.AmountDue.ToString("F2", new System.Globalization.CultureInfo("sl-SI")) €</td>
             <td>@invoice.Status</td>
 
             <td>
                 <a class="btn btn-primary btn-sm me-1" asp-action="Details" asp-route-id="@invoice.Id">Details</a>
+                <form asp-controller="Invoice" asp-action="DeleteConfirmed" asp-route-id="@invoice.Id" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    @Html.AntiForgeryToken()
+                </form>
             </td>
         </tr>
     }

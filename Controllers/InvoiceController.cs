@@ -16,24 +16,29 @@ public class InvoiceController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var invoice = await _context.Invoices.ToListAsync();
-        return View(invoice);
+        var invoices = await _context.Invoices
+            .Include(i => i.WorkOrder)
+            .ThenInclude(w => w.Vehicle)
+            .ThenInclude(v => v.Customer)
+            .ToListAsync();
+
+        return View(invoices);
     }
 
     public async Task<IActionResult> Details(int? id)
     {
         if (id == null) return BadRequest();
         var invoice = await _context.Invoices
-                .Include(i => i.WorkOrder)
-                .ThenInclude(w => w.Vehicle)
-                .ThenInclude(v => v.Customer)
-                .Include(i => i.WorkOrder)
-                .ThenInclude(w => w.ServiceDetails)
-                .Include(i => i.WorkOrder)
-                .ThenInclude(w => w.PartsUsed)
-                .ThenInclude(p => p.PartCatalog)
-                .FirstOrDefaultAsync(i => i.Id == id);
-       
+            .Include(i => i.WorkOrder)
+            .ThenInclude(w => w.Vehicle)
+            .ThenInclude(v => v.Customer)
+            .Include(i => i.WorkOrder)
+            .ThenInclude(w => w.ServiceDetails)
+            .Include(i => i.WorkOrder)
+            .ThenInclude(w => w.PartsUsed)
+            .ThenInclude(p => p.PartCatalog)
+            .FirstOrDefaultAsync(i => i.Id == id);
+
         ViewBag.WorkOrders = _context.WorkOrders
             .Include(w => w.Vehicle)
             .ThenInclude(v => v.Customer)
@@ -42,7 +47,7 @@ public class InvoiceController : Controller
                 w.Id,
                 Label = $"#{w.Id} - {w.Vehicle.Make} {w.Vehicle.Model} ({w.Vehicle.Customer.FullName})"
             }).ToList();
-        
+
         if (invoice == null) return NotFound();
 
         return View(invoice);
@@ -53,11 +58,14 @@ public class InvoiceController : Controller
         PopulateWorkOrdersDropdown(); // Call a helper method
         return View();
     }
-    
+
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("InvoiceNumber,WorkOrderId,TaxAmount,SubTotal,Total,AmountDue,AmountPaid,PaymentType,Status,DateIssued,DatePaid")] Invoice invoice)
+    public async Task<IActionResult> Create(
+        [Bind(
+            "InvoiceNumber,WorkOrderId,TaxAmount,SubTotal,Total,AmountDue,AmountPaid,PaymentType,Status,DateIssued,DatePaid")]
+        Invoice invoice)
     {
         if (ModelState.IsValid)
         {
@@ -82,7 +90,10 @@ public class InvoiceController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("Id,InvoiceNumber,WorkOrderId,TaxAmount,SubTotal,Total,AmountDue,AmountPaid,PaymentType,Status,DateIssued,DatePaid")] Invoice invoice)
+    public async Task<IActionResult> Edit(int id,
+        [Bind(
+            "Id,InvoiceNumber,WorkOrderId,TaxAmount,SubTotal,Total,AmountDue,AmountPaid,PaymentType,Status,DateIssued,DatePaid")]
+        Invoice invoice)
     {
         if (id != invoice.Id) return BadRequest();
 
@@ -105,7 +116,6 @@ public class InvoiceController : Controller
         return View(invoice);
     }
 
-
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
@@ -116,7 +126,7 @@ public class InvoiceController : Controller
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
-    
+
     [HttpGet]
     public async Task<IActionResult> GetWorkOrderDetails(int id)
     {
@@ -149,10 +159,15 @@ public class InvoiceController : Controller
             amountDue = total
         });
     }
-    
+
     private void PopulateWorkOrdersDropdown()
     {
+        //get IDs of workorders that already have an associated invoice
+        var workOrdersWithExistingInvoices = _context.Invoices.Select(i => i.WorkOrderId).ToList();
+
+        //filter workorders to exclude those that already have an invoice
         ViewBag.WorkOrders = _context.WorkOrders
+            .Where(w => !workOrdersWithExistingInvoices.Contains(w.Id)) // Add this filter
             .Include(w => w.Vehicle)
             .ThenInclude(v => v.Customer)
             .Select(w => new
@@ -161,5 +176,4 @@ public class InvoiceController : Controller
                 Label = $"#{w.Id} - {w.Vehicle.Make} {w.Vehicle.Model} ({w.Vehicle.Customer.FullName})"
             }).ToList();
     }
-
 }
