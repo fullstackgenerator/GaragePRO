@@ -9,7 +9,7 @@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     @Html.AntiForgeryToken()
     <input type="hidden" asp-for="Id" />
-
+<div class="w-50">
     <div class="row mb-3">
         <div class="col-md-6">
             <label asp-for="WorkOrderId" class="form-label">Work Order</label>
@@ -31,15 +31,13 @@
             <span asp-validation-for="TaxAmount" class="text-danger"></span>
         </div>
     </div>
- <div class="row mb-3">
+
+    <div class="row mb-3">
         <div class="col-md-6">
             <label asp-for="Total" class="form-label"></label>
             <input asp-for="Total" class="form-control" id="Total" readonly />
             <span asp-validation-for="Total" class="text-danger"></span>
         </div>
-    </div>
-
-    <div class="row mb-3">
         <div class="col-md-6">
             <label asp-for="PaymentType" class="form-label"></label>
             <select asp-for="PaymentType" class="form-select">
@@ -72,7 +70,8 @@
         </div>
     </div>
     
-    <button type="submit" class="btn btn-outline-primary">Save Changes</button>
+<button type="submit" class="btn btn-outline-primary">Save Changes</button>
+</div>
 </form>
 
 @section Scripts {

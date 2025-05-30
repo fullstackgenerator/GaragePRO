@@ -7,7 +7,11 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h4>Invoices</h4>
-    <a class="btn btn-success" asp-action="Create">+ Add New Invoice</a>
+    <div class="d-flex justify-content-between align-items-center ">
+        <a class="btn btn-secondary mx-3" asp-action="Index">Archived Invoices</a>
+        <a class="btn btn-success" asp-action="Create">+ Add New Invoice</a>
+
+    </div>
 </div>
 
 <table class="table table-striped table-bordered table-hover">
