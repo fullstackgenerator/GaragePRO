@@ -64,7 +64,7 @@ public class InvoiceController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(
         [Bind(
-            "InvoiceNumber,WorkOrderId,TaxAmount,SubTotal,Total,AmountDue,AmountPaid,PaymentType,Status,DateIssued,DatePaid")]
+            "InvoiceNumber,WorkOrderId,TaxAmount,SubTotal,Total,PaymentType,Status,DateIssued")]
         Invoice invoice)
     {
         if (ModelState.IsValid)
@@ -85,14 +85,14 @@ public class InvoiceController : Controller
         if (id == null) return BadRequest();
         var invoice = await _context.Invoices.FindAsync(id);
         if (invoice == null) return NotFound();
+        PopulateWorkOrdersDropdown();
         return View(invoice);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id,
-        [Bind(
-            "Id,InvoiceNumber,WorkOrderId,TaxAmount,SubTotal,Total,AmountDue,AmountPaid,PaymentType,Status,DateIssued,DatePaid")]
+        [Bind("Id,InvoiceNumber,WorkOrderId,TaxAmount,SubTotal,Total,PaymentType,Status,DateIssued")] // ADDED PaymentType, Status
         Invoice invoice)
     {
         if (id != invoice.Id) return BadRequest();
@@ -101,7 +101,20 @@ public class InvoiceController : Controller
         {
             try
             {
-                _context.Update(invoice);
+                //retrieve existing entity to update only allowed properties
+                var existingInvoice = await _context.Invoices.FindAsync(id);
+                if (existingInvoice == null) return NotFound();
+
+                //update properties from the bound model
+                existingInvoice.InvoiceNumber = invoice.InvoiceNumber;
+                existingInvoice.WorkOrderId = invoice.WorkOrderId;
+                existingInvoice.TaxAmount = invoice.TaxAmount;
+                existingInvoice.SubTotal = invoice.SubTotal;
+                existingInvoice.Total = invoice.Total;
+                existingInvoice.DateIssued = invoice.DateIssued;
+                existingInvoice.PaymentType = invoice.PaymentType;
+                existingInvoice.Status = invoice.Status;
+
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -112,7 +125,7 @@ public class InvoiceController : Controller
 
             return RedirectToAction(nameof(Index));
         }
-
+        PopulateWorkOrdersDropdown();
         return View(invoice);
     }
 

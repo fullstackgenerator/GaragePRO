@@ -14,15 +14,12 @@ public class Invoice
     public decimal TaxAmount { get; set; }
     public decimal SubTotal { get; set; }
     public decimal Total { get; set; }
-    public decimal AmountDue { get; set; }
-    public decimal AmountPaid { get; set; }
-    [Required]
-    public PaymentType PaymentType { get; set; }
-    [Required]
-    public InvoiceStatus Status { get; set; }
+    
+    public PaymentType? PaymentType { get; set; }
+    public InvoiceStatus? Status { get; set; }
+    
     [Required]
     public DateTime DateIssued { get; set; }
-    public DateTime? DatePaid { get; set; }
 }
 
 public enum PaymentType
