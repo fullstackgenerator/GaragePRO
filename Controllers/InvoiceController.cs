@@ -55,7 +55,7 @@ public class InvoiceController : Controller
 
     public IActionResult Create()
     {
-        PopulateWorkOrdersDropdown(); // Call a helper method
+        PopulateWorkOrdersDropdown();
         return View();
     }
 
@@ -64,7 +64,7 @@ public class InvoiceController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(
         [Bind(
-            "InvoiceNumber,WorkOrderId,TaxAmount,SubTotal,Total,PaymentType,Status,DateIssued")]
+            "WorkOrderId,TaxAmount,SubTotal,Total,PaymentType,Status,DateIssued")]
         Invoice invoice)
     {
         if (ModelState.IsValid)
@@ -73,9 +73,8 @@ public class InvoiceController : Controller
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
-        // IMPORTANT: Re-populate ViewBag.WorkOrders if validation fails
-        PopulateWorkOrdersDropdown(); // Call the same helper method
+        
+        PopulateWorkOrdersDropdown();
         return View(invoice);
     }
 
@@ -92,7 +91,7 @@ public class InvoiceController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id,
-        [Bind("Id,InvoiceNumber,WorkOrderId,TaxAmount,SubTotal,Total,PaymentType,Status,DateIssued")] // ADDED PaymentType, Status
+        [Bind("Id,WorkOrderId,TaxAmount,SubTotal,Total,PaymentType,Status,DateIssued")] // ADDED PaymentType, Status
         Invoice invoice)
     {
         if (id != invoice.Id) return BadRequest();
@@ -106,7 +105,6 @@ public class InvoiceController : Controller
                 if (existingInvoice == null) return NotFound();
 
                 //update properties from the bound model
-                existingInvoice.InvoiceNumber = invoice.InvoiceNumber;
                 existingInvoice.WorkOrderId = invoice.WorkOrderId;
                 existingInvoice.TaxAmount = invoice.TaxAmount;
                 existingInvoice.SubTotal = invoice.SubTotal;

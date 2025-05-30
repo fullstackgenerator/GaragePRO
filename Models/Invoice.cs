@@ -6,7 +6,6 @@ public class Invoice
 {
     public int Id { get; set; }
     [Required]
-    public string? InvoiceNumber { get; set; }
 
     public int WorkOrderId { get; set; }
     public WorkOrder? WorkOrder { get; set; }

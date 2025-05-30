@@ -11,11 +11,6 @@
 
     <div class="row mb-3">
         <div class="col-md-6">
-            <label asp-for="InvoiceNumber" class="form-label"></label>
-            <input asp-for="InvoiceNumber" class="form-control" />
-            <span asp-validation-for="InvoiceNumber" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
             <label asp-for="WorkOrderId" class="form-label">Work Order</label>
             <select asp-for="WorkOrderId" id="WorkOrderId" class="form-select" asp-items="@(new SelectList(ViewBag.WorkOrders, "Id", "Label"))">
                 <option value="">-- Select Work Order --</option>

@@ -16,14 +16,31 @@
     </div>
 </div>
 
-<div class="card mb-4">
+<div class="card mb-4 w-50">
     <div class="card-body">
         <h5 class="card-title">Invoice/Work Order #@Model.WorkOrderId</h5>
         <p class="card-text">
-            <strong>Customer:</strong> @Model.WorkOrder.Vehicle.Customer.FullName<br/>
-            <strong>Address:</strong> @Model.WorkOrder.Vehicle.Customer.Address, @Model.WorkOrder.Vehicle.Customer.PostalCode, @Model.WorkOrder.Vehicle.Customer.City<br/>
-            <strong>Vehicle Make and Model:</strong> @Model.WorkOrder.Vehicle.Make | @Model.WorkOrder.Vehicle.Model<br/>
-            <strong>VIN:</strong> @Model.WorkOrder.Vehicle.VIN<br/>
+        <div class="card mb-4">
+            <div class="card-body">
+                <p class="card-text">
+                    <strong>Customer:</strong> @Model.WorkOrder.Vehicle.Customer.FullName<br/>
+                    <strong>Address:</strong> @Model.WorkOrder.Vehicle.Customer.Address, @Model.WorkOrder.Vehicle.Customer.PostalCode, @Model.WorkOrder.Vehicle.Customer.City<br/>
+                </p>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <div class="card-body">
+                <p class="card-text">
+                    <strong>Vehicle Make and Model:</strong> @Model.WorkOrder.Vehicle.Make | @Model.WorkOrder.Vehicle.Model<br/>
+                    <strong>VIN:</strong> @Model.WorkOrder.Vehicle.VIN<br/>
+                </p>
+            </div>
+        </div>
+        <div class="card mb-4">
+        <div class="card-body">
+            <p class="card-text">
+    
+
             <strong>Sub Total:</strong> @(Model.SubTotal) €<br/>
             <strong>VAT Amount:</strong> @Model.TaxAmount €<br/>
             <strong>Total:</strong> @Model.Total €<br/>
@@ -31,5 +48,7 @@
             <strong>Date Issued:</strong> @Model.DateIssued.ToString("dd.MM.yyyy")
         </p>
     </div>
+</div>
+</div>
 </div>
 
