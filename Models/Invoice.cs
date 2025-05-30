@@ -6,10 +6,10 @@ public class Invoice
 {
     public int Id { get; set; }
     [Required]
-    public string InvoiceNumber { get; set; }
+    public string? InvoiceNumber { get; set; }
 
     public int WorkOrderId { get; set; }
-    public WorkOrder WorkOrder { get; set; }
+    public WorkOrder? WorkOrder { get; set; }
 
     public decimal TaxAmount { get; set; }
     public decimal SubTotal { get; set; }

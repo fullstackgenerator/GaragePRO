@@ -33,14 +33,7 @@ public class InvoiceController : Controller
                 .ThenInclude(w => w.PartsUsed)
                 .ThenInclude(p => p.PartCatalog)
                 .FirstOrDefaultAsync(i => i.Id == id);
-
-        if (invoice == null) return NotFound();
-
-        return View(invoice);
-    }
-
-    public IActionResult Create()
-    {
+       
         ViewBag.WorkOrders = _context.WorkOrders
             .Include(w => w.Vehicle)
             .ThenInclude(v => v.Customer)
@@ -49,24 +42,34 @@ public class InvoiceController : Controller
                 w.Id,
                 Label = $"#{w.Id} - {w.Vehicle.Make} {w.Vehicle.Model} ({w.Vehicle.Customer.FullName})"
             }).ToList();
+        
+        if (invoice == null) return NotFound();
 
+        return View(invoice);
+    }
+
+    public IActionResult Create()
+    {
+        PopulateWorkOrdersDropdown(); // Call a helper method
         return View();
     }
+    
 
-
-[HttpPost]
-[ValidateAntiForgeryToken]
-public async Task<IActionResult> Create([Bind("InvoiceNumber,WorkOrderId,TaxAmount,SubTotal,Total,AmountDue,AmountPaid,PaymentType,Status,DateIssued,DatePaid")] Invoice invoice)
-{
-    if (ModelState.IsValid)
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create([Bind("InvoiceNumber,WorkOrderId,TaxAmount,SubTotal,Total,AmountDue,AmountPaid,PaymentType,Status,DateIssued,DatePaid")] Invoice invoice)
     {
-        _context.Add(invoice);
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
-    }
+        if (ModelState.IsValid)
+        {
+            _context.Add(invoice);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
-    return View(invoice);
-}
+        // IMPORTANT: Re-populate ViewBag.WorkOrders if validation fails
+        PopulateWorkOrdersDropdown(); // Call the same helper method
+        return View(invoice);
+    }
 
 
     public async Task<IActionResult> Edit(int? id)
@@ -145,6 +148,18 @@ public async Task<IActionResult> Create([Bind("InvoiceNumber,WorkOrderId,TaxAmou
             total,
             amountDue = total
         });
+    }
+    
+    private void PopulateWorkOrdersDropdown()
+    {
+        ViewBag.WorkOrders = _context.WorkOrders
+            .Include(w => w.Vehicle)
+            .ThenInclude(v => v.Customer)
+            .Select(w => new
+            {
+                w.Id,
+                Label = $"#{w.Id} - {w.Vehicle.Make} {w.Vehicle.Model} ({w.Vehicle.Customer.FullName})"
+            }).ToList();
     }
 
 }

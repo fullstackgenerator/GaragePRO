@@ -15,9 +15,11 @@
     <tr>
         <th>Invoice Number</th>
         <th>Work Order ID</th>
-        <th>Date</th>
         <th>Customer</th>
         <th>Vehicle</th>
+        <th>Date Crated</th>
+        <th>Amount</th>
+        <th>Status</th>
         <th style="width: 180px;">Actions</th>
     </tr>
     </thead>
@@ -27,9 +29,11 @@
         <tr>
             <td>@invoice.InvoiceNumber</td>
             <td>@invoice.WorkOrderId</td>
-            <td>@invoice.DateIssued</td>
             <td>@invoice.WorkOrder?.Vehicle?.Customer?.FullName</td>
             <td>@invoice.WorkOrder?.Vehicle?.Make @invoice.WorkOrder?.Vehicle?.Model</td>
+            <td>@invoice.DateIssued.ToString("dd.MM.yyyy")</td>
+            <td>@invoice.AmountDue</td>
+            <td>@invoice.Status</td>
 
             <td>
                 <a class="btn btn-primary btn-sm me-1" asp-action="Details" asp-route-id="@invoice.Id">Details</a>
