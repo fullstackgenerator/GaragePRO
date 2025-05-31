@@ -14,16 +14,36 @@ public class InvoiceController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string searchString)
     {
-        var invoices = await _context.Invoices
+        var invoicesQuery = _context.Invoices
             .Include(i => i.WorkOrder)
             .ThenInclude(w => w.Vehicle)
             .ThenInclude(v => v.Customer)
-            .ToListAsync();
+            .AsQueryable();
 
+        if (!string.IsNullOrEmpty(searchString))
+        {
+            searchString = searchString.ToLower();
+
+            invoicesQuery = invoicesQuery.Where(i =>
+                i.WorkOrderId.ToString().Contains(searchString) ||
+                
+                (i.WorkOrder != null && i.WorkOrder.Vehicle != null && i.WorkOrder.Vehicle.Customer != null &&
+                 i.WorkOrder.Vehicle.Customer.FullName.ToLower().Contains(searchString)) ||
+
+                (i.WorkOrder != null && i.WorkOrder.Vehicle != null &&
+                 i.WorkOrder.Vehicle.Make.ToLower().Contains(searchString)) ||
+
+                (i.WorkOrder != null && i.WorkOrder.Vehicle != null &&
+                 i.WorkOrder.Vehicle.Model.ToLower().Contains(searchString))
+            );
+        }
+
+        var invoices = await invoicesQuery.ToListAsync();
         return View(invoices);
     }
+
 
     public async Task<IActionResult> Details(int? id)
     {
@@ -60,11 +80,10 @@ public class InvoiceController : Controller
     }
 
 
-    [HttpPost]
+     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(
-        [Bind(
-            "WorkOrderId,TaxAmount,SubTotal,Total,PaymentType,Status,DateIssued")]
+        [Bind("WorkOrderId,TaxAmount,SubTotal,Total,PaymentType,Status,DateIssued")]
         Invoice invoice)
     {
         if (ModelState.IsValid)
@@ -91,7 +110,7 @@ public class InvoiceController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id,
-        [Bind("Id,WorkOrderId,TaxAmount,SubTotal,Total,PaymentType,Status,DateIssued")] // ADDED PaymentType, Status
+        [Bind("Id,WorkOrderId,TaxAmount,SubTotal,Total,PaymentType,Status,DateIssued")]
         Invoice invoice)
     {
         if (id != invoice.Id) return BadRequest();

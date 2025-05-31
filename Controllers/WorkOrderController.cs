@@ -16,13 +16,38 @@ public class WorkOrderController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string searchString)
     {
-        var workOrders = await _context.WorkOrders
+        var workOrdersQuery = _context.WorkOrders
             .Include(w => w.Mechanic)
             .Include(w => w.Vehicle)
-            .ToListAsync();
+            .ThenInclude(v => v.Customer)
+            .AsQueryable();
 
+        if (!string.IsNullOrEmpty(searchString))
+        {
+            searchString = searchString.ToLower();
+
+            workOrdersQuery = workOrdersQuery.Where(w =>
+                w.Id.ToString().Contains(searchString) ||
+                
+                (w.Vehicle != null && w.Vehicle.Customer != null &&
+                 w.Vehicle.Customer.FullName.ToLower().Contains(searchString)) ||
+
+                (w.Vehicle != null && w.Vehicle.Make.ToLower().Contains(searchString)) ||
+
+                (w.Vehicle != null && w.Vehicle.Model.ToLower().Contains(searchString)) ||
+    
+                (w.Vehicle != null &&
+                 w.Vehicle.VIN.ToLower().Contains(searchString)) ||
+                
+                (w.Mechanic != null &&
+                 w.Mechanic.FullName.ToLower().Contains(searchString))
+            );
+        }
+        
+        var workOrders = await workOrdersQuery.ToListAsync();
+        
         return View(workOrders);
     }
 
@@ -52,7 +77,9 @@ public class WorkOrderController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(WorkOrder workOrder)
+    public async Task<IActionResult> Create(
+        [Bind("VehicleId,MechanicId,DateIn,DateOut,Notes,Status")]
+        WorkOrder workOrder)
     {
         if (ModelState.IsValid)
         {
@@ -80,7 +107,9 @@ public class WorkOrderController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, WorkOrder workOrder)
+    public async Task<IActionResult> Edit(int id,
+        [Bind("Id,VehicleId,MechanicId,DateIn,DateOut,Notes,Status,CreatedAt")]
+        WorkOrder workOrder)
     {
         if (id != workOrder.Id) return BadRequest();
 
@@ -88,7 +117,7 @@ public class WorkOrderController : Controller
         {
             try
             {
-                _context.Update(workOrder);
+                _context.Update(workOrder); 
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
