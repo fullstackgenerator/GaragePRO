@@ -7,10 +7,14 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h4>Work Orders</h4>
-<div class="d-flex justify-content-between align-items-center ">
-    <a class="btn btn-secondary mx-3" asp-action="Index">Archived Work Orders</a>
-    <a class="btn btn-success" asp-action="Create">+ Add new Work Order</a>
-</div>
+    <div class="d-flex justify-content-between align-items-center ">
+        <form class="d-flex" role="search">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+        <a class="btn btn-secondary mx-3" asp-action="Index">Archived Work Orders</a>
+        <a class="btn btn-success" asp-action="Create">+ Add new Work Order</a>
+    </div>
 </div>
 
 <table class="table table-striped table-bordered table-hover">
