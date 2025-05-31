@@ -7,20 +7,27 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h4>Invoices</h4>
-    <div class="d-flex justify-content-between align-items-center ">
-        <form class="d-flex" role="search" method="get">
-            <input class="form-control me-2"
-                   type="search"
-                   name="searchString"
-                   value="@Context.Request.Query["searchString"]"
-                   placeholder="Search" 
-                   aria-label="Search" />
-            <button class="btn btn-outline-success" type="submit">Search</button>
+    <div class="d-flex align-items-center">
+        <form class="d-flex align-items-center" role="search" method="get">
+            <div class="me-2">
+                <input class="form-control" type="date" name="fromDate" value="@Context.Request.Query["fromDate"]" />
+            </div>
+            <div class="me-2">
+                <input class="form-control" type="date" name="toDate" value="@Context.Request.Query["toDate"]" />
+            </div>
+            <div class="me-2">
+                <input class="form-control" 
+                       type="search" 
+                       name="searchString" 
+                       value="@Context.Request.Query["searchString"]"
+                       placeholder="Customer, Vehicle, etc." />
+            </div>
+            <button class="btn btn-sm btn-outline-success me-2" type="submit">Filter</button>
+            <a class="btn btn-sm btn-outline-secondary" asp-action="Index">Clear</a>
         </form>
-
-        <a class="btn btn-secondary mx-3" asp-action="Index">Archived Invoices</a>
-        <a class="btn btn-success" asp-action="Create">+ Add New Invoice</a>
-
+        
+        <a class="btn btn-sm btn-secondary mx-3" asp-action="Index">Archived Invoices</a>
+        <a class="btn btn-sm btn-success" asp-action="Create">+ Add New Invoice</a>
     </div>
 </div>
 

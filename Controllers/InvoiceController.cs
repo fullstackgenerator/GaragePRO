@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GaragePRO.Models;
+using System;
 
 namespace GaragePRO.Controllers;
 
@@ -14,7 +15,7 @@ public class InvoiceController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index(string searchString)
+    public async Task<IActionResult> Index(string searchString, DateTime? fromDate, DateTime? toDate)
     {
         var invoicesQuery = _context.Invoices
             .Include(i => i.WorkOrder)
@@ -28,22 +29,30 @@ public class InvoiceController : Controller
 
             invoicesQuery = invoicesQuery.Where(i =>
                 i.WorkOrderId.ToString().Contains(searchString) ||
-                
                 (i.WorkOrder != null && i.WorkOrder.Vehicle != null && i.WorkOrder.Vehicle.Customer != null &&
                  i.WorkOrder.Vehicle.Customer.FullName.ToLower().Contains(searchString)) ||
-
                 (i.WorkOrder != null && i.WorkOrder.Vehicle != null &&
                  i.WorkOrder.Vehicle.Make.ToLower().Contains(searchString)) ||
-
                 (i.WorkOrder != null && i.WorkOrder.Vehicle != null &&
-                 i.WorkOrder.Vehicle.Model.ToLower().Contains(searchString))
+                 i.WorkOrder.Vehicle.Model.ToLower().Contains(searchString)) ||
+                (i.WorkOrder != null && i.WorkOrder.Vehicle != null &&
+                 i.WorkOrder.Vehicle.VIN.ToLower().Contains(searchString))
             );
+        }
+
+        if (fromDate.HasValue)
+        {
+            invoicesQuery = invoicesQuery.Where(i => i.DateIssued.Date >= fromDate.Value.Date);
+        }
+
+        if (toDate.HasValue)
+        {
+            invoicesQuery = invoicesQuery.Where(i => i.DateIssued.Date <= toDate.Value.Date);
         }
 
         var invoices = await invoicesQuery.ToListAsync();
         return View(invoices);
     }
-
 
     public async Task<IActionResult> Details(int? id)
     {
@@ -79,8 +88,7 @@ public class InvoiceController : Controller
         return View();
     }
 
-
-     [HttpPost]
+    [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(
         [Bind("WorkOrderId,TaxAmount,SubTotal,Total,PaymentType,Status,DateIssued")]
@@ -92,7 +100,7 @@ public class InvoiceController : Controller
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        
+
         PopulateWorkOrdersDropdown();
         return View(invoice);
     }
@@ -142,6 +150,7 @@ public class InvoiceController : Controller
 
             return RedirectToAction(nameof(Index));
         }
+
         PopulateWorkOrdersDropdown();
         return View(invoice);
     }
