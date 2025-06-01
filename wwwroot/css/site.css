@@ -33,3 +33,32 @@ body {
 .offcanvas {
   --bs-offcanvas-width: 250px;
 }
+
+.badge-status-paid {
+  background-color: #28a745; /* green */
+  color: white;
+}
+.badge-status-unpaid {
+  background-color: #dc3545; /* red */
+  color: white;
+}
+.badge-status-archived {
+  background-color: #6c757d; /* gray */
+  color: white;
+}
+.badge-status-scheduled {
+  background-color: #007bff; /* blue */
+  color: white;
+}
+.badge-status-inprogress {
+  background-color: #ffc107; /* yellow-orange */
+  color: #343a40; /* dark text for contrast */
+}
+.badge-status-completed {
+  background-color: #17a2b8; /* teal/info */
+  color: white;
+}
+.badge-status-cancelled {
+  background-color: #6f42c1; /* purple */
+  color: white;
+}

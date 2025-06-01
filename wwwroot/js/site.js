@@ -104,3 +104,8 @@ $(document).ready(function () {
         });
     });
     });
+
+flatpickr(".datepicker", {
+    dateFormat: "d. m. y",
+    allowInput: true
+});

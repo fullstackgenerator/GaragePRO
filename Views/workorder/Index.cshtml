@@ -6,61 +6,77 @@
 }
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h4>Work Orders</h4> <div class="d-flex align-items-center">
+    <h4>Work Orders</h4>
+    <div class="d-flex align-items-center">
         <form class="d-flex align-items-center" role="search" method="get">
             <div class="me-2">
-                <input class="form-control" type="date" name="fromDate" value="@Context.Request.Query["fromDate"]" />
+                <label for="fromDate" class="visually-hidden">From Date</label>
+                <input class="form-control" type="date" id="fromDate" name="fromDate" value="@Context.Request.Query["fromDate"]" title="Filter from date" />
             </div>
             <div class="me-2">
-                <input class="form-control" type="date" name="toDate" value="@Context.Request.Query["toDate"]" />
+                <label for="toDate" class="visually-hidden">To Date</label>
+                <input class="form-control" type="date" id="toDate" name="toDate" value="@Context.Request.Query["toDate"]" title="Filter to date" />
             </div>
             <div class="me-2">
+                <label for="searchString" class="visually-hidden">Search</label>
                 <input class="form-control" 
                        type="search" 
+                       id="searchString"
                        name="searchString" 
                        value="@Context.Request.Query["searchString"]"
-                       placeholder="Customer, Vehicle, etc." />
+                       placeholder="Customer, Vehicle, etc."
+                       aria-label="Search work orders" />
             </div>
-            <button class="btn btn-sm btn-outline-success me-2" type="submit">Filter</button>
-            <a class="btn btn-sm btn-outline-secondary" asp-action="Index">Clear</a>
+            <button class="btn btn-sm btn-outline-success me-2" type="submit" title="Apply Filters">
+                <i class="fas fa-filter"></i></button>
+            <a class="btn btn-sm btn-outline-secondary" asp-action="Index" title="Clear Filters">
+                <i class="fas fa-sync-alt"></i></a>
         </form>
         
-        <a class="btn btn-sm btn-secondary mx-3" asp-action="Index" asp-route-showArchived="true">Archived Work Orders</a>
-        <a class="btn btn-sm btn-success" asp-action="Create">+ Add New Work Order</a>
+        <a class="btn btn-sm btn-secondary mx-3" asp-action="Index" asp-route-showArchived="true" title="View Archived Work Orders">Archived Work Orders</a>
+        <a class="btn btn-sm btn-success" asp-action="Create" title="Add New Work Order">
+            <i class="fas fa-plus"></i> Add New Work Order
+        </a>
     </div>
 </div>
 
-<table class="table table-striped table-bordered table-hover">
-    <thead class="table-dark">
-    <tr>
-        <th>Work Order ID</th>
-        <th>Date issued</th>
-        <th>Status</th>
-        <th>Mechanic</th>
-        <th>VIN</th>
-        <th>Make</th>
-        <th>Model</th>
-        <th>Year</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var workOrder in Model)
-    {
+<div class="table-responsive">
+    <table id="workOrdersTable" class="table table-striped table-bordered table-hover">
+        <thead class="table-dark">
         <tr>
-            <td>@workOrder.Id</td>
-            <td>@workOrder.DateIn.ToString("dd.MM.yyyy")</td>
-            <td>@workOrder.Status</td>
-            <td>@workOrder.Mechanic.FullName</td>
-            <td>@workOrder.Vehicle.VIN</td>
-            <td>@workOrder.Vehicle.Make</td>
-            <td>@workOrder.Vehicle.Model</td>
-            <td>@workOrder.Vehicle.Year</td>
-
-            <td class="d-flex align-items-center justify-content-center">
-                <a class="btn btn-primary btn-sm me-1" asp-action="Details" asp-route-id="@workOrder.Id">Details</a>
-            </td>
+            <th>Work Order ID</th>
+            <th>Date In</th>
+            <th>Status</th>
+            <th>Mechanic</th>
+            <th>VIN</th>
+            <th>Make</th>
+            <th>Model</th>
+            <th>Year</th>
+            <th>Actions</th>
         </tr>
-    }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        @foreach (var workOrder in Model)
+        {
+            <tr>
+                <td>@workOrder.Id</td>
+                <td>@workOrder.DateIn.ToString("dd.MM.yyyy")</td>
+                <td>
+                    <span class="badge rounded-pill badge-status-@workOrder.Status.ToString().ToLower()">
+                        @workOrder.Status
+                    </span>
+                </td>
+                <td>@workOrder.Mechanic?.FullName</td>
+                <td>@workOrder.Vehicle?.VIN</td>
+                <td>@workOrder.Vehicle?.Make</td>
+                <td>@workOrder.Vehicle?.Model</td>
+                <td>@workOrder.Vehicle?.Year</td>
+
+                <td class="d-flex align-items-center justify-content-center">
+                    <a class="btn btn-primary btn-sm me-1" asp-action="Details" asp-route-id="@workOrder.Id" title="View Details">Details</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

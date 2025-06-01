@@ -1,63 +1,89 @@
 ﻿@model IEnumerable<GaragePRO.Models.Invoice>
-
 @{
     ViewBag.Title = "Invoices";
     Layout = "_Layout";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h4>Invoices</h4>
-    <div class="d-flex align-items-center">
-        <form class="d-flex align-items-center" role="search" method="get">
-            <div class="me-2">
-                <input class="form-control" type="date" name="fromDate" value="@Context.Request.Query["fromDate"]" />
-            </div>
-            <div class="me-2">
-                <input class="form-control" type="date" name="toDate" value="@Context.Request.Query["toDate"]" />
-            </div>
-            <div class="me-2">
-                <input class="form-control" 
-                       type="search" 
-                       name="searchString" 
-                       value="@Context.Request.Query["searchString"]"
-                       placeholder="Customer, Vehicle, etc." />
-            </div>
-            <button class="btn btn-sm btn-outline-success me-2" type="submit">Filter</button>
-            <a class="btn btn-sm btn-outline-secondary" asp-action="Index">Clear</a>
-        </form>
-        
-        <a class="btn btn-sm btn-secondary mx-3" asp-action="Index" asp-route-showArchived="true">Archived Invoices</a>
-        <a class="btn btn-sm btn-success" asp-action="Create">+ Add New Invoice</a>
+<!-- Toast / Message -->
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+        @TempData["Message"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 mt-3">
+    <h2 class="fw-bold">Invoices</h2>
+    <div>
+        <a class="btn btn-outline-secondary me-2" asp-action="Index" asp-route-showArchived="true">
+            <i class="bi bi-archive me-1"></i>Archived
+        </a>
+        <a class="btn btn-success" asp-action="Create">
+            <i class="bi bi-plus-circle me-1"></i>New Invoice
+        </a>
     </div>
 </div>
 
-<table class="table table-striped table-bordered table-hover">
+<!-- Filter Form -->
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <form class="row g-3 align-items-end" method="get">
+            <div class="col-md-3">
+                <label class="form-label">From</label>
+                <input class="form-control datepicker" type="text" name="fromDate" value="@Context.Request.Query["fromDate"]" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">To</label>
+                <input class="form-control datepicker" type="text" name="toDate" value="@Context.Request.Query["toDate"]" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Search</label>
+                <input class="form-control" type="search" name="searchString" value="@Context.Request.Query["searchString"]" placeholder="Customer, Vehicle, etc." />
+            </div>
+            <div class="col-md-auto">
+                <button class="btn btn-outline-success" type="submit">
+                    <i class="bi bi-funnel me-1"></i>Filter
+                </button>
+                <a class="btn btn-outline-secondary" asp-action="Index">
+                    <i class="bi bi-x-circle me-1"></i>Clear
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Invoices Table -->
+<table class="table table-hover table-bordered shadow-sm">
     <thead class="table-dark">
-    <tr>
-        <th>Work Order ID</th>
-        <th>Customer</th>
-        <th>Vehicle</th>
-        <th>Date Issued</th>
-        <th>Amount</th>
-        <th>Status</th>
-        <th>Actions</th>
-    </tr>
+        <tr>
+            <th>Work Order ID</th>
+            <th>Customer</th>
+            <th>Vehicle</th>
+            <th>Date Issued</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
     </thead>
     <tbody>
-    @foreach (var invoice in Model)
-    {
-        <tr>
-            <td>@invoice.WorkOrderId</td>
-            <td>@invoice.WorkOrder?.Vehicle?.Customer?.FullName</td>
-            <td>@invoice.WorkOrder?.Vehicle?.Make @invoice.WorkOrder?.Vehicle?.Model</td>
-            <td>@invoice.DateIssued.ToString("dd.MM.yyyy")</td>
-            <td>@(invoice.Total.ToString("N2", new System.Globalization.CultureInfo("sl-SI"))) €</td>
-            <td>@invoice.Status</td>
-
-            <td class="d-flex align-items-center justify-content-center">
-                <a class="btn btn-primary btn-sm me-1" asp-action="Details" asp-route-id="@invoice.Id">Details</a>
-            </td>
-        </tr>
-    }
+        @foreach (var invoice in Model)
+        {
+            <tr>
+                <td>@invoice.WorkOrderId</td>
+                <td>@invoice.WorkOrder?.Vehicle?.Customer?.FullName</td>
+                <td>@invoice.WorkOrder?.Vehicle?.Make @invoice.WorkOrder?.Vehicle?.Model</td>
+                <td>@invoice.DateIssued.ToString("dd.MM.yyyy")</td>
+                <td>@(invoice.Total.ToString("N2", new System.Globalization.CultureInfo("sl-SI"))) €</td>
+                <td>
+                    <span class="badge bg-@(invoice.Status == InvoiceStatus.Paid ? "success" : "danger")">
+                        @invoice.Status
+                    </span>
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-primary" asp-action="Details" asp-route-id="@invoice.Id">Details</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
