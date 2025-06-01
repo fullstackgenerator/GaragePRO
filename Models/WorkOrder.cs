@@ -27,5 +27,6 @@ public enum WorkOrderStatus
     Scheduled,
     InProgress,
     Completed,
-    Cancelled
+    Cancelled,
+    Archived
 }

@@ -19,9 +19,15 @@
                 <li>
                     <a class="dropdown-item" asp-action="Edit" asp-route-id="@Model.Id">Export PDF</a>
                 </li>
-                <li>
-                    <a class="dropdown-item" asp-action="Edit" asp-route-id="@Model.Id">Archive Invoice</a>
-                </li>
+           @if (Model.Status == InvoiceStatus.Paid)
+                {
+                    <li>
+                        <form asp-action="ArchiveInvoice" asp-route-id="@Model.Id" method="post">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="dropdown-item">Archive Invoice</button>
+                        </form>
+                    </li>
+                }
                 <li>
                     <form asp-action="DeleteConfirmed" asp-route-id="@Model.Id" method="post">
                         @Html.AntiForgeryToken()

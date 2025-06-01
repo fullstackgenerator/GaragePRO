@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace GaragePRO.Controllers;
 
 public class WorkOrderController : Controller
@@ -16,15 +15,24 @@ public class WorkOrderController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index(string searchString, DateTime? fromDate, DateTime? toDate)
+    public async Task<IActionResult> Index(string searchString, DateTime? fromDate, DateTime? toDate, bool showArchived = false) // Add showArchived parameter
     {
         var workOrdersQuery = _context.WorkOrders
             .Include(w => w.Mechanic)
             .Include(w => w.Vehicle)
             .ThenInclude(v => v.Customer)
             .AsQueryable();
+        
+        if (showArchived)
+        {
+            workOrdersQuery = workOrdersQuery.Where(w => w.Status == WorkOrderStatus.Archived);
+        }
+        else
+        {
+            //default: show work orders that are NOT Archived
+            workOrdersQuery = workOrdersQuery.Where(w => w.Status != WorkOrderStatus.Archived);
+        }
 
-        // Apply text search filter
         if (!string.IsNullOrEmpty(searchString))
         {
             searchString = searchString.ToLower();

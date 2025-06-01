@@ -31,5 +31,6 @@ public enum PaymentType
 public enum InvoiceStatus
 {
     Paid,
-    Unpaid
+    Unpaid,
+    Archived
 }

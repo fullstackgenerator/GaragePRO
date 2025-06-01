@@ -26,7 +26,7 @@
             <a class="btn btn-sm btn-outline-secondary" asp-action="Index">Clear</a>
         </form>
         
-        <a class="btn btn-sm btn-secondary mx-3" asp-action="Index">Archived Invoices</a>
+        <a class="btn btn-sm btn-secondary mx-3" asp-action="Index" asp-route-showArchived="true">Archived Invoices</a>
         <a class="btn btn-sm btn-success" asp-action="Create">+ Add New Invoice</a>
     </div>
 </div>
@@ -40,7 +40,7 @@
         <th>Date Issued</th>
         <th>Amount</th>
         <th>Status</th>
-        <th style="width: 180px;">Actions</th>
+        <th>Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -54,7 +54,7 @@
             <td>@(invoice.Total.ToString("N2", new System.Globalization.CultureInfo("sl-SI"))) €</td>
             <td>@invoice.Status</td>
 
-            <td>
+            <td class="d-flex align-items-center justify-content-center">
                 <a class="btn btn-primary btn-sm me-1" asp-action="Details" asp-route-id="@invoice.Id">Details</a>
             </td>
         </tr>

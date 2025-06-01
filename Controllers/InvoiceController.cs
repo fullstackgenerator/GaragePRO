@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GaragePRO.Models;
-using System;
 
 namespace GaragePRO.Controllers;
 
@@ -15,13 +14,22 @@ public class InvoiceController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index(string searchString, DateTime? fromDate, DateTime? toDate)
+    public async Task<IActionResult> Index(string searchString, DateTime? fromDate, DateTime? toDate, bool showArchived = false)
     {
         var invoicesQuery = _context.Invoices
             .Include(i => i.WorkOrder)
             .ThenInclude(w => w.Vehicle)
             .ThenInclude(v => v.Customer)
             .AsQueryable();
+
+        if (showArchived)
+        {
+            invoicesQuery = invoicesQuery.Where(i => i.Status == InvoiceStatus.Archived);
+        }
+        else
+        {
+            invoicesQuery = invoicesQuery.Where(i => i.Status != InvoiceStatus.Archived);
+        }
 
         if (!string.IsNullOrEmpty(searchString))
         {
@@ -59,13 +67,13 @@ public class InvoiceController : Controller
         if (id == null) return BadRequest();
         var invoice = await _context.Invoices
             .Include(i => i.WorkOrder)
-            .ThenInclude(w => w.Vehicle)
-            .ThenInclude(v => v.Customer)
+                .ThenInclude(w => w.Vehicle)
+                    .ThenInclude(v => v.Customer)
             .Include(i => i.WorkOrder)
-            .ThenInclude(w => w.ServiceDetails)
+                .ThenInclude(w => w.ServiceDetails)
             .Include(i => i.WorkOrder)
-            .ThenInclude(w => w.PartsUsed)
-            .ThenInclude(p => p.PartCatalog)
+                .ThenInclude(w => w.PartsUsed)
+                    .ThenInclude(p => p.PartCatalog)
             .FirstOrDefaultAsync(i => i.Id == id);
 
         ViewBag.WorkOrders = _context.WorkOrders
@@ -127,11 +135,9 @@ public class InvoiceController : Controller
         {
             try
             {
-                //retrieve existing entity to update only allowed properties
                 var existingInvoice = await _context.Invoices.FindAsync(id);
                 if (existingInvoice == null) return NotFound();
 
-                //update properties from the bound model
                 existingInvoice.WorkOrderId = invoice.WorkOrderId;
                 existingInvoice.TaxAmount = invoice.TaxAmount;
                 existingInvoice.SubTotal = invoice.SubTotal;
@@ -179,7 +185,6 @@ public class InvoiceController : Controller
 
         if (workOrder == null) return NotFound();
 
-
         decimal laborTotal = workOrder.ServiceDetails.Sum(s => s.LaborHours * s.HourlyRate);
         decimal partsTotal = workOrder.PartsUsed.Sum(p => p.Quantity * p.PartCatalog.PartPrice);
 
@@ -201,12 +206,10 @@ public class InvoiceController : Controller
 
     private void PopulateWorkOrdersDropdown()
     {
-        //get IDs of workorders that already have an associated invoice
         var workOrdersWithExistingInvoices = _context.Invoices.Select(i => i.WorkOrderId).ToList();
 
-        //filter workorders to exclude those that already have an invoice
         ViewBag.WorkOrders = _context.WorkOrders
-            .Where(w => !workOrdersWithExistingInvoices.Contains(w.Id)) // Add this filter
+            .Where(w => !workOrdersWithExistingInvoices.Contains(w.Id))
             .Include(w => w.Vehicle)
             .ThenInclude(v => v.Customer)
             .Select(w => new
@@ -214,5 +217,37 @@ public class InvoiceController : Controller
                 w.Id,
                 Label = $"#{w.Id} - {w.Vehicle.Make} {w.Vehicle.Model} ({w.Vehicle.Customer.FullName})"
             }).ToList();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ArchiveInvoice(int id)
+    {
+        var invoice = await _context.Invoices.FindAsync(id);
+
+        if (invoice == null)
+        {
+            TempData["ErrorMessage"] = "Invoice not found.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        if (invoice.Status == InvoiceStatus.Paid)
+        {
+            invoice.Status = InvoiceStatus.Archived;
+
+            //find associated WorkOrder and archive it
+            var workOrder = await _context.WorkOrders.FindAsync(invoice.WorkOrderId);
+            if (workOrder != null)
+            {
+                if (workOrder.Status == WorkOrderStatus.Completed)
+                {
+                    workOrder.Status = WorkOrderStatus.Archived;
+                }
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        return RedirectToAction(nameof(Details), new { id = id });
     }
 }
