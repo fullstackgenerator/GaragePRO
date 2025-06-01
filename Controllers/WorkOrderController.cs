@@ -16,7 +16,7 @@ public class WorkOrderController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index(string searchString)
+    public async Task<IActionResult> Index(string searchString, DateTime? fromDate, DateTime? toDate)
     {
         var workOrdersQuery = _context.WorkOrders
             .Include(w => w.Mechanic)
@@ -24,30 +24,36 @@ public class WorkOrderController : Controller
             .ThenInclude(v => v.Customer)
             .AsQueryable();
 
+        // Apply text search filter
         if (!string.IsNullOrEmpty(searchString))
         {
             searchString = searchString.ToLower();
 
             workOrdersQuery = workOrdersQuery.Where(w =>
                 w.Id.ToString().Contains(searchString) ||
-                
                 (w.Vehicle != null && w.Vehicle.Customer != null &&
                  w.Vehicle.Customer.FullName.ToLower().Contains(searchString)) ||
-
                 (w.Vehicle != null && w.Vehicle.Make.ToLower().Contains(searchString)) ||
-
                 (w.Vehicle != null && w.Vehicle.Model.ToLower().Contains(searchString)) ||
-    
                 (w.Vehicle != null &&
                  w.Vehicle.VIN.ToLower().Contains(searchString)) ||
-                
                 (w.Mechanic != null &&
                  w.Mechanic.FullName.ToLower().Contains(searchString))
             );
         }
-        
+
+        if (fromDate.HasValue)
+        {
+            workOrdersQuery = workOrdersQuery.Where(w => w.DateIn.Date >= fromDate.Value.Date);
+        }
+
+        if (toDate.HasValue)
+        {
+            workOrdersQuery = workOrdersQuery.Where(w => w.DateIn.Date <= toDate.Value.Date);
+        }
+
         var workOrders = await workOrdersQuery.ToListAsync();
-        
+
         return View(workOrders);
     }
 
@@ -60,7 +66,7 @@ public class WorkOrderController : Controller
             .Include(w => w.Vehicle)
             .Include(w => w.ServiceDetails)
             .Include(w => w.PartsUsed)
-                .ThenInclude(p => p.PartCatalog)
+            .ThenInclude(p => p.PartCatalog)
             .FirstOrDefaultAsync(w => w.Id == id);
 
         if (workOrder == null) return NotFound();
@@ -117,7 +123,7 @@ public class WorkOrderController : Controller
         {
             try
             {
-                _context.Update(workOrder); 
+                _context.Update(workOrder);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -144,7 +150,7 @@ public class WorkOrderController : Controller
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
-    
+
     public async Task<IActionResult> SearchMechanics(string term)
     {
         var results = await _context.Mechanics
