@@ -24,6 +24,7 @@ public class WorkOrder
 
 public enum WorkOrderStatus
 {
+    Pending,
     Scheduled,
     InProgress,
     Completed,

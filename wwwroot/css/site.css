@@ -19,6 +19,7 @@ html {
 
 body {
   margin-bottom: 60px;
+  background: linear-gradient(90deg,rgba(199, 239, 255, 0.11) 0%, rgba(164, 229, 252, 0.21) 50%, rgba(148, 218, 255, 0.25) 100%);
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
@@ -61,4 +62,18 @@ body {
 .badge-status-cancelled {
   background-color: #6f42c1; /* purple */
   color: white;
+}
+
+.card {
+  height: 100%;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card-text {
+  flex-grow: 1;
 }
