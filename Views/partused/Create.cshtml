@@ -24,10 +24,11 @@
                         <label asp-for="Quantity"></label>
                         <input asp-for="Quantity" class="form-control"/>
                     </div>
-
-                    <button type="submit" class="btn btn-outline-primary">Add Part</button>
-                    <a class="btn btn-outline-dark" asp-action="Details" asp-controller="WorkOrder"
+                    <div class="d-flex justify-content-center gap-3">
+                    <button type="submit" class="btn btn-outline-primary w-25">Add Part</button>
+                    <a class="btn btn-outline-dark w-25" asp-action="Details" asp-controller="WorkOrder"
                        asp-route-id="@Model.WorkOrderId">Cancel</a>
+                    </div>
                 </div>
             </div>
         </form>

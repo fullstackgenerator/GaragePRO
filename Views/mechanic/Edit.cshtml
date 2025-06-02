@@ -46,9 +46,11 @@
                             <span asp-validation-for="Phone" class="text-danger"></span>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-outline-primary">Confirm edit</button>
-                    <a class="btn btn-outline-dark" asp-action="Details" asp-controller="Mechanic"
+                    <div class="d-flex justify-content-center gap-3">
+                    <button type="submit" class="btn btn-outline-primary w-25">Confirm edit</button>
+                    <a class="btn btn-outline-dark w-25" asp-action="Details" asp-controller="Mechanic"
                        asp-route-id="@Model.Id">Cancel</a>
+                    </div>
                 </div>
             </div>
         </form>

@@ -34,10 +34,11 @@
                     <span asp-validation-for="HourlyRate" class="text-danger"></span>
                 </div>
             </div>
-
-            <button type="submit" class="btn btn-outline-primary">Save Changes</button>
-            <a class="btn btn-outline-dark" asp-action="Details" asp-controller="WorkOrder"
-               asp-route-id="@Model.WorkOrderId">Cancel</a>
+            <div class="d-flex justify-content-center gap-3">
+                <button type="submit" class="btn btn-outline-primary">Save Changes</button>
+                <a class="btn btn-outline-dark" asp-action="Details" asp-controller="WorkOrder"
+                   asp-route-id="@Model.WorkOrderId">Cancel</a>
+            </div>
         </div>
     </div>
 </form>

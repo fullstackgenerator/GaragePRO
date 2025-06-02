@@ -52,9 +52,11 @@
                     <span asp-validation-for="Status" class="text-danger"></span>
                 </div>
             </div>
-            <button type="submit" class="btn btn-outline-primary">Save Changes</button>
-            <a class="btn btn-outline-dark" asp-action="Details" asp-controller="WorkOrder"
-               asp-route-id="@Model.Id">Cancel</a>
+            <div class="d-flex justify-content-center gap-3">
+                <button type="submit" class="btn btn-outline-primary w-25">Save Changes</button>
+                <a class="btn btn-outline-dark w-25" asp-action="Details" asp-controller="WorkOrder"
+                   asp-route-id="@Model.Id">Cancel</a>
+            </div>
         </form>
 
         @section Scripts {

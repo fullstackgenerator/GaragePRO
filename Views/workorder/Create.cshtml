@@ -48,8 +48,10 @@
                     <span asp-validation-for="Status" class="text-danger"></span>
                 </div>
             </div>
-            <button type="submit" class="btn btn-outline-primary">Create</button>
-            <a class="btn btn-outline-dark" asp-action="Index" asp-controller="WorkOrder">Cancel</a>
+            <div class="d-flex justify-content-center gap-3">
+                <button type="submit" class="btn btn-outline-primary w-25">Create</button>
+                <a class="btn btn-outline-dark w-25" asp-action="Index" asp-controller="WorkOrder">Cancel</a>
+            </div>
         </form>
 
         @section Scripts {
