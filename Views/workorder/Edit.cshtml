@@ -4,53 +4,61 @@
     ViewBag.Title = "Edit Work Order";
     Layout = "_Layout";
 }
-<h4>Edit Work Order</h4>
-<form asp-action="Edit" method="post" class="mt-4">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    @Html.AntiForgeryToken()
-    <input type="hidden" asp-for="Id" />
-    <input type="hidden" asp-for="CreatedAt" />
+<div class="card">
+    <div class="card-header">
+        <h4>Edit Work Order</h4>
+        <form asp-action="Edit" method="post" class="mt-4">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id"/>
+            <input type="hidden" asp-for="CreatedAt"/>
 
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <label>Work Order Start</label>
-            <input asp-for="DateIn" type="date" class="form-control"/>
-            <span asp-validation-for="DateIn" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <label>Work Order Finish</label>
-            <input asp-for="DateOut" type="date" class="form-control"/>
-            <span asp-validation-for="DateOut" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <label>Vehicle</label>
-            <select asp-for="VehicleId" class="form-control" id="vehicle-select" name="VehicleId" data-selected-id="@Model.VehicleId" readonly=""></select>
-            <span asp-validation-for="VehicleId" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <label>Mechanic</label>
-            <select asp-for="MechanicId" class="form-control" id="mechanic-select" name="MechanicId" data-selected-id="@Model.MechanicId"></select>
-            <span asp-validation-for="MechanicId" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <label>Notes</label>
-            <input asp-for="Notes" class="form-control"/>
-            <span asp-validation-for="Notes" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <label>Order status</label>
-            <select asp-for="Status" asp-items="Html.GetEnumSelectList<WorkOrderStatus>()" class="form-control"></select>
-            <span asp-validation-for="Status" class="text-danger"></span>
-        </div>
-    </div>
-    <button type="submit" class="btn btn-outline-primary">Save Changes</button>
-    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
-</form>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label>Work Order Start</label>
+                    <input asp-for="DateIn" type="date" class="form-control"/>
+                    <span asp-validation-for="DateIn" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label>Work Order Finish</label>
+                    <input asp-for="DateOut" type="date" class="form-control"/>
+                    <span asp-validation-for="DateOut" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label>Vehicle</label>
+                    <select asp-for="VehicleId" class="form-control" id="vehicle-select" name="VehicleId"
+                            data-selected-id="@Model.VehicleId" readonly=""></select>
+                    <span asp-validation-for="VehicleId" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label>Mechanic</label>
+                    <select asp-for="MechanicId" class="form-control" id="mechanic-select" name="MechanicId"
+                            data-selected-id="@Model.MechanicId"></select>
+                    <span asp-validation-for="MechanicId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label>Notes</label>
+                    <input asp-for="Notes" class="form-control"/>
+                    <span asp-validation-for="Notes" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label>Order status</label>
+                    <select asp-for="Status" asp-items="Html.GetEnumSelectList<WorkOrderStatus>()"
+                            class="form-control"></select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-outline-primary">Save Changes</button>
+            <a class="btn btn-outline-dark" asp-action="Details" asp-controller="WorkOrder"
+               asp-route-id="@Model.Id">Cancel</a>
+        </form>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    }
+        @section Scripts {
+            <partial name="_ValidationScriptsPartial"/>
+        }
+    </div>
+</div>

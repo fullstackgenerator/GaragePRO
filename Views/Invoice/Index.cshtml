@@ -31,15 +31,18 @@
         <form class="row g-3 align-items-end" method="get">
             <div class="col-md-3">
                 <label class="form-label">From</label>
-                <input class="form-control datepicker" type="text" name="fromDate" value="@Context.Request.Query["fromDate"]" />
+                <input class="form-control datepicker" type="text" name="fromDate"
+                       value="@Context.Request.Query["fromDate"]"/>
             </div>
             <div class="col-md-3">
                 <label class="form-label">To</label>
-                <input class="form-control datepicker" type="text" name="toDate" value="@Context.Request.Query["toDate"]" />
+                <input class="form-control datepicker" type="text" name="toDate"
+                       value="@Context.Request.Query["toDate"]"/>
             </div>
             <div class="col-md-4">
                 <label class="form-label">Search</label>
-                <input class="form-control" type="search" name="searchString" value="@Context.Request.Query["searchString"]" placeholder="Customer, Vehicle, etc." />
+                <input class="form-control" type="search" name="searchString"
+                       value="@Context.Request.Query["searchString"]" placeholder="Customer, Vehicle, etc."/>
             </div>
             <div class="col-md-auto">
                 <button class="btn btn-outline-success" type="submit">
@@ -54,36 +57,52 @@
 </div>
 
 <!-- Invoices Table -->
-<table class="table table-hover table-bordered shadow-sm">
-    <thead class="table-dark">
-        <tr>
-            <th>Work Order ID</th>
-            <th>Customer</th>
-            <th>Vehicle</th>
-            <th>Date Issued</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
+<table class="table table-hover table-hover shadow-sm">
+    <thead class="table-light">
+    <tr>
+        <th>Work Order ID</th>
+        <th>Date Issued</th>
+        <th>Customer</th>
+        <th>Vehicle</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
     </thead>
     <tbody>
-        @foreach (var invoice in Model)
-        {
-            <tr>
-                <td>@invoice.WorkOrderId</td>
-                <td>@invoice.WorkOrder?.Vehicle?.Customer?.FullName</td>
-                <td>@invoice.WorkOrder?.Vehicle?.Make @invoice.WorkOrder?.Vehicle?.Model</td>
-                <td>@invoice.DateIssued.ToString("dd.MM.yyyy")</td>
-                <td>@(invoice.Total.ToString("N2", new System.Globalization.CultureInfo("sl-SI"))) €</td>
-                <td>
-                    <span class="badge bg-@(invoice.Status == InvoiceStatus.Paid ? "success" : "danger")">
+    @foreach (var invoice in Model)
+    {
+        <tr>
+            <td>@invoice.WorkOrderId</td>
+            <td>@invoice.DateIssued.ToString("dd.MM.yyyy")</td>
+            <td>@invoice.WorkOrder?.Vehicle?.Customer?.FullName</td>
+            <td>@invoice.WorkOrder?.Vehicle?.Make @invoice.WorkOrder?.Vehicle?.Model</td>
+            <td>@(invoice.Total.ToString("N2", new System.Globalization.CultureInfo("sl-SI"))) €</td>
+            <td>
+                @{
+                    string statusBgClass = "secondary";
+
+                    switch (invoice.Status)
+                    {
+                        case InvoiceStatus.Paid:
+                            statusBgClass = "success";
+                            break;
+                        case InvoiceStatus.Unpaid:
+                            statusBgClass = "danger";
+                            break;
+                        case InvoiceStatus.Archived:
+                            statusBgClass = "dark";
+                            break;
+                    }
+                }
+                <span class="badge bg-@statusBgClass">
                         @invoice.Status
                     </span>
-                </td>
-                <td>
-                    <a class="btn btn-sm btn-primary" asp-action="Details" asp-route-id="@invoice.Id">Details</a>
-                </td>
-            </tr>
-        }
+            </td>
+            <td>
+                <a class="btn btn-sm btn-primary" asp-action="Details" asp-route-id="@invoice.Id">Details</a>
+            </td>
+        </tr>
+    }
     </tbody>
 </table>

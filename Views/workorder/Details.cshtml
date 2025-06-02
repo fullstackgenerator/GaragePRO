@@ -4,169 +4,189 @@
     ViewBag.Title = "Work Order Details";
     Layout = "_Layout";
 }
+<div class="card">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4>Work Order Details</h4>
+            <div>
+                <a class="btn btn-outline-primary btn-sm" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                <form asp-action="DeleteConfirmed" asp-route-id="@Model.Id" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                    @Html.AntiForgeryToken()
+                </form>
+                <a class="btn btn-outline-dark btn-sm" asp-action="Index" asp-controller="WorkOrder">Back</a>
+            </div>
+        </div>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h4>Work Order Details</h4>
-    <div>
-        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-        <form asp-action="DeleteConfirmed" asp-route-id="@Model.Id" method="post" style="display:inline;">
-            <button type="submit" class="btn btn-danger">Delete</button>
-            @Html.AntiForgeryToken()
-        </form>
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Work Order #@Model.Id</h5>
+                <p class="card-text">
+                    <strong>Date In:</strong> @Model.DateIn.ToString("dd. MM. yyyy") <br/>
+                    <strong>Date Out:</strong> @(Model.DateOut?.ToString("dd. MM. yyyy")) <br/>
+                    <strong>Vehicle:</strong> @Model.Vehicle.Make @Model.Vehicle.Model <br/>
+                    <strong>Mechanic:</strong> @Model.Mechanic.FullName <br/>
+                    <strong>Status:</strong> @Model.Status.ToString() <br/>
+                    <strong>Notes:</strong> @Model.Notes
+                </p>
+            </div>
+        </div>
     </div>
 </div>
+<br/>
+<div class="card">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h4>Service Detail</h4>
+            <a asp-controller="ServiceDetail" asp-action="Create" asp-route-workOrderId="@Model.Id"
+               class="btn btn-sm btn-success">
+                + Add Service Detail
+            </a>
+        </div>
 
-<div class="card mb-4">
-    <div class="card-body">
-        <h5 class="card-title">Work Order #@Model.Id</h5>
-        <p class="card-text">
-            <strong>Date In:</strong> @Model.DateIn.ToString("dd. MM. yyyy") <br />
-            <strong>Date Out:</strong> @(Model.DateOut?.ToString("dd. MM. yyyy")) <br />
-            <strong>Vehicle:</strong> @Model.Vehicle.Make @Model.Vehicle.Model <br />
-            <strong>Mechanic:</strong> @Model.Mechanic.FullName <br />
-            <strong>Status:</strong> @Model.Status.ToString() <br />
-            <strong>Notes:</strong> @Model.Notes
-        </p>
-    </div>
-</div>
-
-<div class="d-flex justify-content-between align-items-center mb-2">
-    <h4>Service Detail</h4>
-    <a asp-controller="ServiceDetail" asp-action="Create" asp-route-workOrderId="@Model.Id" class="btn btn-sm btn-success">
-        + Add Service Detail
-    </a>
-</div>
-
-@if (Model.ServiceDetails != null && Model.ServiceDetails.Any())
-{
-    <div class="card my-4">
-    <div class="card-body">
-
-        <table class="table table-bordered">
-            <thead>
-            <tr>
-                <th>Description</th>
-                <th>Labor Hours</th>
-                <th>Rate</th>
-                <th>Total</th>
-                <th>Repair date</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach (var detail in Model.ServiceDetails)
-            {
-                <tr>
-                    <td>@detail.Description</td>
-                    <td>@detail.LaborHours</td>
-                    <td>@detail.HourlyRate.ToString("0.00") €</td>
-                    <td>@(detail.LaborHours * detail.HourlyRate) €</td>
-                    <td>@detail.CreatedAt.ToShortDateString()</td>
-                    <td>
-                        <div class="d-flex gap-2 align-items-center">
-                            <a class="btn btn-primary btn-sm" asp-controller="ServiceDetail" asp-action="Edit" asp-route-id="@detail.Id">Edit</a>
-                            <form asp-controller="ServiceDetail" asp-action="DeleteServiceDetailConfirmed" asp-route-id="@detail.Id" method="post" style="display:inline;">
-                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                @Html.AntiForgeryToken()
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-            }
-            </tbody>
-        </table>
-    </div>
-    </div>
-}
-else
-{
-    <div class="alert alert-warning">No service details recorded yet.</div>
-}
-
-<div class="d-flex justify-content-between align-items-center mb-2">
-    <h4>Parts Used</h4>
-    <a asp-controller="PartUsed" asp-action="Create" asp-route-workOrderId="@Model.Id" class="btn btn-sm btn-success">
-        + Add Part
-    </a>
-</div>
-
-@if (Model.PartsUsed != null && Model.PartsUsed.Any())
-{
-    <div class="card my-4">
-    <div class="card-body">
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>Part Name</th>
-            <th>Part Price</th>
-            <th>Quantity</th>
-            <th>Total</th>
-            <th>Date</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var part in Model.PartsUsed)
+        @if (Model.ServiceDetails != null && Model.ServiceDetails.Any())
         {
-            <tr>
-                <td>@part.PartCatalog.PartName</td>
-                <td>@part.PartCatalog.PartPrice.ToString("0.00") €</td>
-                <td>@part.Quantity</td>
-                <td>@(part.Quantity * part.PartCatalog.PartPrice) €</td>
-                <td>@part.CreatedAt.ToShortDateString()</td>
-                <td>
-                    <div class="d-flex gap-2 align-items-center">
-                        <a class="btn btn-primary btn-sm" asp-controller="PartUsed" asp-action="Edit" asp-route-id="@part.Id">Edit</a>
-                        <form asp-controller="PartUsed" asp-action="Delete" asp-route-id="@part.Id" method="post" style="display:inline;">
-                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                            @Html.AntiForgeryToken()
-                        </form>
-                    </div>
-                </td>
-            </tr>
+            <div class="card my-4">
+                <div class="card-body">
+
+                    <table class="table table-hover table-hover shadow-sm">
+                        <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Labor Hours</th>
+                            <th>Rate</th>
+                            <th>Total</th>
+                            <th>Repair date</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var detail in Model.ServiceDetails)
+                        {
+                            <tr>
+                                <td>@detail.Description</td>
+                                <td>@detail.LaborHours</td>
+                                <td>@detail.HourlyRate.ToString("N2", new System.Globalization.CultureInfo("sl-SI")) €</td>
+                                <td>@((detail.LaborHours * detail.HourlyRate).ToString("N2", new System.Globalization.CultureInfo("sl-SI"))) €</td>
+                                <td>@detail.CreatedAt.ToString("dd. MM. yyyy")</td>
+                                <td>
+                                    <div class="d-flex gap-2 align-items-center">
+                                        <a class="btn btn btn-outline-primary btn-sm" asp-controller="ServiceDetail"
+                                           asp-action="Edit" asp-route-id="@detail.Id">Edit</a>
+                                        <form asp-controller="ServiceDetail" asp-action="DeleteServiceDetailConfirmed"
+                                              asp-route-id="@detail.Id" method="post" style="display:inline;">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                                            @Html.AntiForgeryToken()
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         }
-
-        @{
-            var partsBase = Model.PartsUsed.Sum(p => p.Quantity * p.PartCatalog.PartPrice);
-            var partsVAT = partsBase * 0.22m;
-
-            var laborBase = Model.ServiceDetails.Sum(s => s.HourlyRate * s.LaborHours);
-            var laborVAT = laborBase * 0.095m;
-
-            var grandTotalExclVAT = partsBase + laborBase;
-            var grandTotal = grandTotalExclVAT + partsVAT + laborVAT;
+        else
+        {
+            <div class="alert alert-warning">No service details recorded yet.</div>
         }
+    </div>
+</div><br/>
 
-        <tr>
-            <td colspan="3" class="text-end"><strong>Total Parts (Excl. VAT):</strong></td>
-            <td colspan="3">@partsBase.ToString("0.00") €</td>
-        </tr>
-        <tr>
-            <td colspan="3" class="text-end"><strong>Total Parts VAT (22%):</strong></td>
-            <td colspan="3">@partsVAT.ToString("0.00") €</td>
-        </tr>
-        <tr>
-            <td colspan="3" class="text-end"><strong>Total Labour (Excl. VAT):</strong></td>
-            <td colspan="3">@laborBase.ToString("0.00") €</td>
-        </tr>
-        <tr>
-            <td colspan="3" class="text-end"><strong>Total Labour VAT (9.5%):</strong></td>
-            <td colspan="3">@laborVAT.ToString("0.00") €</td>
-        </tr>
-        <tr>
-            <td colspan="3" class="text-end"><strong>Grand Total (Excl. VAT):</strong></td>
-            <td colspan="3">@grandTotalExclVAT.ToString("0.00") €</td>
-        </tr>
-        <tr>
-            <td colspan="3" class="text-end"><strong>Grand Total (Incl. VAT):</strong></td>
-            <td colspan="3"><strong>@grandTotal.ToString("0.00") €</strong></td>
-        </tr>
-        </tbody>
-    </table>
+<div class="card">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h4>Parts Used</h4>
+            <a asp-controller="PartUsed" asp-action="Create" asp-route-workOrderId="@Model.Id"
+               class="btn btn-sm btn-success">
+                + Add Part
+            </a>
+        </div>
+
+        @if (Model.PartsUsed != null && Model.PartsUsed.Any())
+        {
+            <div class="card my-4">
+                <div class="card-body">
+                    <table class="table table-hover table-hover shadow-sm">
+                        <thead>
+                        <tr>
+                            <th>Part Name</th>
+                            <th>Part Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var part in Model.PartsUsed)
+                        {
+                            <tr>
+                                <td>@part.PartCatalog.PartName</td>
+                                <td>@part.PartCatalog.PartPrice.ToString("N2", new System.Globalization.CultureInfo("sl-SI")) €</td>
+                                <td>@part.Quantity</td>
+                                <td>@(part.Quantity * part.PartCatalog.PartPrice) €</td>
+                                <td>@part.CreatedAt.ToString("dd. MM. yyyy")</td>
+                                <td>
+                                    <div class="d-flex gap-2 align-items-center">
+                                        <a class="btn btn-outline-primary btn-sm" asp-controller="PartUsed"
+                                           asp-action="Edit" asp-route-id="@part.Id">Edit</a>
+                                        <form asp-controller="PartUsed" asp-action="Delete" asp-route-id="@part.Id"
+                                              method="post" style="display:inline;">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                                            @Html.AntiForgeryToken()
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+
+                        @{
+                            var partsBase = Model.PartsUsed.Sum(p => p.Quantity * p.PartCatalog.PartPrice);
+                            var partsVAT = partsBase * 0.22m;
+
+                            var laborBase = Model.ServiceDetails.Sum(s => s.HourlyRate * s.LaborHours);
+                            var laborVAT = laborBase * 0.095m;
+
+                            var grandTotalExclVAT = partsBase + laborBase;
+                            var grandTotal = grandTotalExclVAT + partsVAT + laborVAT;
+                        }
+
+                        <tr>
+                            <td colspan="3" class="text-end"><strong>Total Parts (Excl. VAT):</strong></td>
+                            <td colspan="3">@partsBase.ToString("N2", new System.Globalization.CultureInfo("sl-SI")) €</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="text-end"><strong>Total Parts VAT (22%):</strong></td>
+                            <td colspan="3">@partsVAT.ToString("N2", new System.Globalization.CultureInfo("sl-SI")) €</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="text-end"><strong>Total Labour (Excl. VAT):</strong></td>
+                            <td colspan="3">@laborBase.ToString("N2", new System.Globalization.CultureInfo("sl-SI")) €</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="text-end"><strong>Total Labour VAT (9.5%):</strong></td>
+                            <td colspan="3">@laborVAT.ToString("N2", new System.Globalization.CultureInfo("sl-SI")) €</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="text-end"><strong>Grand Total (Excl. VAT):</strong></td>
+                            <td colspan="3">@grandTotalExclVAT.ToString("N2", new System.Globalization.CultureInfo("sl-SI")) €</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="text-end"><strong>Grand Total (Incl. VAT):</strong></td>
+                            <td colspan="3">
+                                <strong>@grandTotal.ToString("N2", new System.Globalization.CultureInfo("sl-SI")) €</strong>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info">No parts recorded for this work order.</div>
+        }
     </div>
-    </div>
-}
-else
-{
-    <div class="alert alert-info">No parts recorded for this work order.</div>
-}
+</div>

@@ -9,7 +9,8 @@
     <h4>Invoice Details</h4>
     <div>
         <div class="dropdown">
-            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
                 Actions
             </button>
             <ul class="dropdown-menu">
@@ -19,7 +20,7 @@
                 <li>
                     <a class="dropdown-item" asp-action="Edit" asp-route-id="@Model.Id">Export PDF</a>
                 </li>
-           @if (Model.Status == InvoiceStatus.Paid)
+                @if (Model.Status == InvoiceStatus.Paid)
                 {
                     <li>
                         <form asp-action="ArchiveInvoice" asp-route-id="@Model.Id" method="post">
@@ -54,24 +55,26 @@
         <div class="card mb-4">
             <div class="card-body">
                 <p class="card-text">
-                    <strong>Vehicle Make and Model:</strong> @Model.WorkOrder.Vehicle.Make | @Model.WorkOrder.Vehicle.Model<br/>
+                    <strong>Vehicle Make and
+                        Model:</strong> @Model.WorkOrder.Vehicle.Make | @Model.WorkOrder.Vehicle.Model<br/>
                     <strong>VIN:</strong> @Model.WorkOrder.Vehicle.VIN<br/>
                 </p>
             </div>
         </div>
         <div class="card mb-4">
-        <div class="card-body">
-            <p class="card-text">
-    
+            <div class="card-body">
+                <p class="card-text">
 
-            <strong>Sub Total:</strong> @(Model.SubTotal) €<br/>
-            <strong>VAT Amount:</strong> @Model.TaxAmount €<br/>
-            <strong>Total:</strong> @Model.Total €<br/>
-            <strong>Payment Type:</strong> @Model.PaymentType<br/>
-            <strong>Date Issued:</strong> @Model.DateIssued.ToString("dd.MM.yyyy")
-        </p>
+
+                    <strong>Sub Total:</strong> @(Model.SubTotal) €<br/>
+                    <strong>VAT Amount:</strong> @Model.TaxAmount €<br/>
+                    <strong>Total:</strong> @Model.Total €<br/>
+                    <strong>Payment Type:</strong> @Model.PaymentType<br/>
+                    <strong>Date Issued:</strong> @Model.DateIssued.ToString("dd.MM.yyyy")
+                </p>
+            </div>
+        </div>
+        <a class="btn btn-outline-dark w-25" asp-action="Index" asp-controller="Invoice">Back</a>
     </div>
-</div>
-</div>
 </div>
 

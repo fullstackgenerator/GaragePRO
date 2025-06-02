@@ -4,32 +4,37 @@
     ViewBag.Title = "Edit Parts Used";
     Layout = "_Layout";
 }
-<h4>Edit Part Used</h4>
-<form asp-action="Edit" method="post" class="mt-4">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    @Html.AntiForgeryToken()
-    <input type="hidden" asp-for="Id" />
-    <input type="hidden" asp-for="CreatedAt" />
-    <input type="hidden" asp-for="WorkOrderId" />
+<div class="card">
+    <div class="card-header">
+        <h4>Edit Part Used</h4>
+        <form asp-action="Edit" method="post" class="mt-4">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id"/>
+            <input type="hidden" asp-for="CreatedAt"/>
+            <input type="hidden" asp-for="WorkOrderId"/>
 
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <label asp-for="PartCatalogId"></label>
-            <select asp-for="PartCatalogId" asp-items="ViewBag.PartCatalogs" class="form-control">
-                <option value="">-- Select Part --</option>
-            </select>
-            <span asp-validation-for="PartCatalogId" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <label>Quantity</label>
-            <input asp-for="Quantity" class="form-control"/>
-            <span asp-validation-for="Quantity" class="text-danger"></span>
-        </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label asp-for="PartCatalogId"></label>
+                    <select asp-for="PartCatalogId" asp-items="ViewBag.PartCatalogs" class="form-control">
+                        <option value="">-- Select Part --</option>
+                    </select>
+                    <span asp-validation-for="PartCatalogId" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label>Quantity</label>
+                    <input asp-for="Quantity" class="form-control"/>
+                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-outline-primary">Add</button>
+            <a class="btn btn-outline-dark" asp-action="Details" asp-controller="WorkOrder"
+               asp-route-id="@Model.WorkOrderId">Cancel</a>
+        </form>
+
+        @section Scripts {
+            <partial name="_ValidationScriptsPartial"/>
+        }
     </div>
-    <button type="submit" class="btn btn-outline-primary">Save Changes</button>
-    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
-</form>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    }
+</div>

@@ -4,38 +4,51 @@
     ViewBag.Title = "Mechanics";
     Layout = "_Layout";
 }
-<form asp-action="Create" method="post" class="mt-4">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <input asp-for="FullName" class="form-control" placeholder="Full Name"/>
-            <span asp-validation-for="FullName" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <input asp-for="AssignedVehicleBrand" class="form-control" placeholder="Assigned vehicle brand"/>
-            <span asp-validation-for="AssignedVehicleBrand" class="text-danger"></span>
-        </div>
+<div class="card">
+    <div class="card-header">
+        <h4>Add New Mechanic</h4>
+        <form asp-action="Create" method="post" class="mt-4">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <p class="card-text">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <input asp-for="FullName" class="form-control" placeholder="Full Name"/>
+                            <span asp-validation-for="FullName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <input asp-for="AssignedVehicleBrand" class="form-control"
+                                   placeholder="Assigned vehicle brand"/>
+                            <span asp-validation-for="AssignedVehicleBrand" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <input asp-for="Seniority" class="form-control" placeholder="Seniority"/>
+                            <span asp-validation-for="Seniority" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <input asp-for="EmploymentStartYear" class="form-control"
+                                   placeholder="Employment start year"/>
+                            <span asp-validation-for="EmploymentStartYear" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <select asp-for="Status" class="form-control"
+                                    asp-items="Html.GetEnumSelectList<Status>()"></select>
+                            <span asp-validation-for="Status" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <input asp-for="Phone" class="form-control" placeholder="Phone"/>
+                            <span asp-validation-for="Phone" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-outline-primary">Create</button>
+                    <a class="btn btn-outline-dark" asp-action="Index" asp-controller="Mechanic">Cancel</a>
+                </div>
+            </div>
+        </form>
     </div>
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <input asp-for="Seniority" class="form-control" placeholder="Seniority"/>
-            <span asp-validation-for="Seniority" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <input asp-for="EmploymentStartYear" class="form-control" placeholder="Employment start year"/>
-            <span asp-validation-for="EmploymentStartYear" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <select asp-for="Status" class="form-control" asp-items="Html.GetEnumSelectList<Status>()"></select>
-            <span asp-validation-for="Status" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <input asp-for="Phone" class="form-control" placeholder="Phone"/>
-            <span asp-validation-for="Phone" class="text-danger"></span>
-        </div>
-    </div>
-    <button type="submit" class="btn btn-outline-primary">Create</button>
-</form>
+</div>

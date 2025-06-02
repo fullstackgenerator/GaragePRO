@@ -5,36 +5,49 @@
     Layout = "_Layout";
 }
 
-<h2>Edit Vehicle Details</h2>
-
-<form asp-action="Edit" method="post" class="mt-4">
-
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <input asp-for="Make" class="form-control" placeholder="Make"/>
-            <span asp-validation-for="Make" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <input asp-for="Model" class="form-control" placeholder="Model"/>
-            <span asp-validation-for="Model" class="text-danger"></span>
-        </div>
+<div class="card">
+    <div class="card-header">
+        <h4>Edit Vehicle Details</h4>
+        <form asp-action="Edit" method="post" class="mt-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <p class="card-text">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Make">Make</label>
+                            <input asp-for="Make" class="form-control" placeholder="Make"/>
+                            <span asp-validation-for="Make" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Model">Model</label>
+                            <input asp-for="Model" class="form-control" placeholder="Model"/>
+                            <span asp-validation-for="Model" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Year">Year</label>
+                            <input asp-for="Year" class="form-control" placeholder="Year"/>
+                            <span asp-validation-for="Year" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="VIN">VIN</label>
+                            <input asp-for="VIN" class="form-control" placeholder="VIN"/>
+                            <span asp-validation-for="VIN" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Mileage">Mileage</label>
+                            <input asp-for="Mileage" class="form-control" placeholder="Mileage"/>
+                            <span asp-validation-for="Mileage" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-outline-primary">Confirm edit</button>
+                    <a class="btn btn-outline-dark" asp-action="Details" asp-controller="Customer"
+                       asp-route-id="@Model.Id">Cancel</a>
+                </div>
+            </div>
+        </form>
     </div>
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <input asp-for="Year" class="form-control" placeholder=">ear"/>
-            <span asp-validation-for="Year" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <input asp-for="VIN" class="form-control" placeholder="VIN"/>
-            <span asp-validation-for="VIN" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <input asp-for="Mileage" class="form-control" placeholder="mileage"/>
-            <span asp-validation-for="Mileage" class="text-danger"></span>
-        </div>
-    </div>
-    <button type="submit" class="btn btn-outline-primary">Confirm edit</button>
-    <a href="/customer" class="btn btn-outline-dark">Cancel</a>
-</form>
+</div>

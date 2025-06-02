@@ -15,14 +15,14 @@
 <div class="card mb-4">
     <div class="card-body">
         <p class="card-text">
-            <h5 class="card-title">@Model.FullName</h5>
-            <strong>Seniority:</strong> @Model.Seniority
-            <br>
-            <strong>Start of employment:</strong> @Model.EmploymentStartYear
-            <br>
-            <strong>Status: </strong>@Model.Status
-            <br>
-            <strong>Phone:</strong> @Model.Phone
+        <h5 class="card-title">@Model.FullName</h5>
+        <strong>Seniority:</strong> @Model.Seniority
+        <br>
+        <strong>Start of employment:</strong> @Model.EmploymentStartYear
+        <br>
+        <strong>Status: </strong>@Model.Status
+        <br>
+        <strong>Phone:</strong> @Model.Phone
         </p>
     </div>
 </div>
@@ -33,7 +33,7 @@
 
 @if (Model.WorkOrders.Any())
 {
-    <table class="table table-striped table-bordered">
+    <table class="table table-hover table-hover shadow-sm">
         <thead>
         <tr>
             <th>Work Order Number</th>
@@ -51,7 +51,7 @@
                     </a>
                 </td>
                 <td>
-                   @workOrder.Vehicle.Make @workOrder.Vehicle.Model
+                    @workOrder.Vehicle.Make @workOrder.Vehicle.Model
                 </td>
 
                 <td>@workOrder.DateIn.ToString("dd.MM.yyyy")</td>

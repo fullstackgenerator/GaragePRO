@@ -4,38 +4,51 @@
     ViewBag.Title = "Customers";
     Layout = "_Layout";
 }
-<form asp-action="Create" method="post" class="mt-4">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    @Html.AntiForgeryToken()
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <input asp-for="FullName" class="form-control" placeholder="Full Name"/>
-            <span asp-validation-for="FullName" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <input asp-for="Address" class="form-control" placeholder="Address"/>
-            <span asp-validation-for="Address" class="text-danger"></span>
-        </div>
+<div class="card">
+    <div class="card-header">
+        <h4>Add New Customer</h4>
+        <form asp-action="Create" method="post" class="mt-4">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @Html.AntiForgeryToken()
+            <div class="card mb-4">
+                <div class="card-body">
+                    <p class="card-text">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <input asp-for="FullName" class="form-control" placeholder="Full Name"/>
+                            <span asp-validation-for="FullName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <input asp-for="Address" class="form-control" placeholder="Address"/>
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <input asp-for="City" class="form-control" placeholder="City"/>
+                            <span asp-validation-for="City" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <input asp-for="PostalCode" class="form-control" placeholder="Postal Code"/>
+                            <span asp-validation-for="PostalCode" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <input asp-for="Phone" class="form-control" placeholder="Phone"/>
+                            <span asp-validation-for="Phone" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <input asp-for="Email" class="form-control" placeholder="Email"/>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-outline-primary">Create</button>
+                    <a class="btn btn-outline-dark" asp-action="Index" asp-controller="Customer">Cancel</a>
+                </div>
+            </div>
+
+        </form>
+
     </div>
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <input asp-for="City" class="form-control" placeholder="City"/>
-            <span asp-validation-for="City" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <input asp-for="PostalCode" class="form-control" placeholder="Postal Code"/>
-            <span asp-validation-for="PostalCode" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <input asp-for="Phone" class="form-control" placeholder="Phone"/>
-            <span asp-validation-for="Phone" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <input asp-for="Email" class="form-control" placeholder="Email"/>
-            <span asp-validation-for="Email" class="text-danger"></span>
-        </div>
-    </div>
-    <button type="submit" class="btn btn-outline-primary">Create</button>
-</form>
+</div>
