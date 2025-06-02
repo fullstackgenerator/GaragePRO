@@ -3,10 +3,11 @@
 @{
     ViewBag.Title = "Invoice Details";
     Layout = "_Layout";
+    var slCulture = new System.Globalization.CultureInfo("sl-SI");
 }
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h4>Invoice Details</h4>
+    <h4>Invoice #@Model.Id Details</h4>
     <div>
         <div class="dropdown">
             <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
@@ -15,10 +16,10 @@
             </button>
             <ul class="dropdown-menu">
                 <li>
-                    <a class="dropdown-item" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                    <a class="dropdown-item" asp-action="Edit" asp-route-id="@Model.Id">Edit Invoice</a>
                 </li>
                 <li>
-                    <a class="dropdown-item" asp-action="Edit" asp-route-id="@Model.Id">Export PDF</a>
+                    <a class="dropdown-item" href="#">Export PDF (Placeholder)</a>
                 </li>
                 @if (Model.Status == InvoiceStatus.Paid)
                 {
@@ -40,41 +41,187 @@
     </div>
 </div>
 
-<div class="card mb-4 w-50">
+<div class="card mb-4">
+    <div class="card-header">
+        <h5>Invoice Information</h5>
+    </div>
     <div class="card-body">
-        <h5 class="card-title">Invoice/Work Order #@Model.WorkOrderId</h5>
-        <p class="card-text">
-        <div class="card mb-4">
-            <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
                 <p class="card-text">
-                    <strong>Customer:</strong> @Model.WorkOrder.Vehicle.Customer.FullName<br/>
-                    <strong>Address:</strong> @Model.WorkOrder.Vehicle.Customer.Address, @Model.WorkOrder.Vehicle.Customer.PostalCode, @Model.WorkOrder.Vehicle.Customer.City<br/>
-                </p>
-            </div>
-        </div>
-        <div class="card mb-4">
-            <div class="card-body">
-                <p class="card-text">
-                    <strong>Vehicle Make and
-                        Model:</strong> @Model.WorkOrder.Vehicle.Make | @Model.WorkOrder.Vehicle.Model<br/>
-                    <strong>VIN:</strong> @Model.WorkOrder.Vehicle.VIN<br/>
-                </p>
-            </div>
-        </div>
-        <div class="card mb-4">
-            <div class="card-body">
-                <p class="card-text">
-
-
-                    <strong>Sub Total:</strong> @(Model.SubTotal) €<br/>
-                    <strong>VAT Amount:</strong> @Model.TaxAmount €<br/>
-                    <strong>Total:</strong> @Model.Total €<br/>
+                    <strong>Invoice ID:</strong> @Model.Id<br/>
+                    <strong>Work Order ID:</strong> @Model.WorkOrderId<br/>
+                    <strong>Date Issued:</strong> @Model.DateIssued.ToString("dd. MM.yyyy")<br/>
                     <strong>Payment Type:</strong> @Model.PaymentType<br/>
-                    <strong>Date Issued:</strong> @Model.DateIssued.ToString("dd.MM.yyyy")
+                    <strong>Status:</strong> @Model.Status
+                </p>
+            </div>
+            <div class="col-md-6">
+                <p class="card-text">
+                    <strong>Sub Total:</strong> @Model.SubTotal.ToString("N2", slCulture) €<br/>
+                    <strong>VAT Amount:</strong> @Model.TaxAmount.ToString("N2", slCulture) €<br/>
+                    <strong>Total:</strong> @Model.Total.ToString("N2", slCulture) €
                 </p>
             </div>
         </div>
-        <a class="btn btn-outline-dark w-25" asp-action="Index" asp-controller="Invoice">Back</a>
     </div>
 </div>
 
+<div class="card mb-4">
+    <div class="card-header">
+        <h5>Customer Details</h5>
+    </div>
+    <div class="card-body">
+        <p class="card-text">
+            <strong>Name:</strong> @Model.WorkOrder?.Vehicle?.Customer?.FullName<br/>
+            <strong>Address:</strong> @Model.WorkOrder?.Vehicle?.Customer?.Address, @Model.WorkOrder?.Vehicle?.Customer?.PostalCode @Model.WorkOrder?.Vehicle?.Customer?.City<br/>
+            <strong>Phone:</strong> @Model.WorkOrder?.Vehicle?.Customer?.Phone<br/>
+            <strong>Email:</strong> @Model.WorkOrder?.Vehicle?.Customer?.Email
+        </p>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h5>Vehicle Details</h5>
+    </div>
+    <div class="card-body">
+        <p class="card-text">
+            <strong>Make:</strong> @Model.WorkOrder?.Vehicle?.Make<br/>
+            <strong>Model:</strong> @Model.WorkOrder?.Vehicle?.Model<br/>
+            <strong>VIN:</strong> @Model.WorkOrder?.Vehicle?.VIN<br/>
+        </p>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>Service Details</h5>
+    </div>
+    <div class="card-body">
+        @if (Model.WorkOrder?.ServiceDetails != null && Model.WorkOrder.ServiceDetails.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover shadow-sm">
+                    <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Labor Hours</th>
+                        <th>Rate</th>
+                        <th>Total</th>
+                        <th>Date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var detail in Model.WorkOrder.ServiceDetails)
+                    {
+                        <tr>
+                            <td>@detail.Description</td>
+                            <td>@detail.LaborHours</td>
+                            <td>@detail.HourlyRate.ToString("N2", slCulture) €</td>
+                            <td>@((detail.LaborHours * detail.HourlyRate).ToString("N2", slCulture)) €</td>
+                            <td>@detail.CreatedAt.ToString("dd. MM.yyyy")</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-warning">No service details recorded for this work order.</div>
+        }
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>Parts Used</h5>
+    </div>
+    <div class="card-body">
+        @if (Model.WorkOrder?.PartsUsed != null && Model.WorkOrder.PartsUsed.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover shadow-sm">
+                    <thead>
+                    <tr>
+                        <th>Part Name</th>
+                        <th>Part Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th>Date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var part in Model.WorkOrder.PartsUsed)
+                    {
+                        <tr>
+                            <td>@part.PartCatalog?.PartName</td>
+                            <td>@part.PartCatalog?.PartPrice.ToString("N2", slCulture) €</td>
+                            <td>@part.Quantity</td>
+                            <td>@((part.Quantity * (part.PartCatalog?.PartPrice ?? 0m)).ToString("N2", slCulture)) €</td>
+                            <td>@part.CreatedAt.ToString("dd. MM.yyyy")</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info">No parts recorded for this work order.</div>
+        }
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h5>Price Specification (Detailed Billing)</h5>
+    </div>
+    <div class="card-body">
+        @{
+            // Ensure WorkOrder and its collections are not null for calculations
+            var partsBase = Model.WorkOrder?.PartsUsed?.Sum(p => p.Quantity * (p.PartCatalog?.PartPrice ?? 0m)) ?? 0m;
+            var partsVAT = partsBase * 0.22m;
+
+            var laborBase = Model.WorkOrder?.ServiceDetails?.Sum(s => s.HourlyRate * s.LaborHours) ?? 0m;
+            var laborVAT = laborBase * 0.095m;
+
+            var grandTotalExclVAT = partsBase + laborBase;
+            var grandTotal = grandTotalExclVAT + partsVAT + laborVAT;
+        }
+
+        <table class="table table-hover shadow-sm">
+            <tbody>
+            <tr>
+                <td><strong>Total Parts (Excl. VAT):</strong></td>
+                <td class="text-end">@partsBase.ToString("N2", slCulture) €</td>
+            </tr>
+            <tr>
+                <td><strong>Total Parts VAT (22%):</strong></td>
+                <td class="text-end">@partsVAT.ToString("N2", slCulture) €</td>
+            </tr>
+            <tr>
+                <td><strong>Total Labour (Excl. VAT):</strong></td>
+                <td class="text-end">@laborBase.ToString("N2", slCulture) €</td>
+            </tr>
+            <tr>
+                <td><strong>Total Labour VAT (9.5%):</strong></td>
+                <td class="text-end">@laborVAT.ToString("N2", slCulture) €</td>
+            </tr>
+            <tr>
+                <td><strong>Grand Total (Excl. VAT):</strong></td>
+                <td class="text-end">@grandTotalExclVAT.ToString("N2", slCulture) €</td>
+            </tr>
+            <tr class="table-primary">
+                <td><strong>Grand Total (Incl. VAT):</strong></td>
+                <td class="text-end">
+                    <strong>@grandTotal.ToString("N2", slCulture) €</strong>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<a class="btn btn-outline-dark" asp-action="Index" asp-controller="Invoice">Back to Invoices</a>
