@@ -114,9 +114,6 @@
                             <th>Part Name</th>
                             <th>Part Price</th>
                             <th>Quantity</th>
-                            <th>Total</th>
-                            <th>Date</th>
-                            <th>Actions</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -126,7 +123,7 @@
                                 <td>@part.PartCatalog.PartName</td>
                                 <td>@part.PartCatalog.PartPrice.ToString("N2", new System.Globalization.CultureInfo("sl-SI")) €</td>
                                 <td>@part.Quantity</td>
-                                <td>@(part.Quantity * part.PartCatalog.PartPrice) €</td>
+                                <td>@((part.Quantity * part.PartCatalog.PartPrice).ToString("N2", new System.Globalization.CultureInfo("sl-SI"))) €</td>
                                 <td>@part.CreatedAt.ToString("dd. MM. yyyy")</td>
                                 <td>
                                     <div class="d-flex gap-2 align-items-center">
@@ -141,48 +138,71 @@
                                 </td>
                             </tr>
                         }
-
-                        @{
-                            var partsBase = Model.PartsUsed.Sum(p => p.Quantity * p.PartCatalog.PartPrice);
-                            var partsVAT = partsBase * 0.22m;
-
-                            var laborBase = Model.ServiceDetails.Sum(s => s.HourlyRate * s.LaborHours);
-                            var laborVAT = laborBase * 0.095m;
-
-                            var grandTotalExclVAT = partsBase + laborBase;
-                            var grandTotal = grandTotalExclVAT + partsVAT + laborVAT;
-                        }
-
-                        <tr>
-                            <td colspan="3" class="text-end"><strong>Total Parts (Excl. VAT):</strong></td>
-                            <td colspan="3">@partsBase.ToString("N2", new System.Globalization.CultureInfo("sl-SI")) €</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" class="text-end"><strong>Total Parts VAT (22%):</strong></td>
-                            <td colspan="3">@partsVAT.ToString("N2", new System.Globalization.CultureInfo("sl-SI")) €</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" class="text-end"><strong>Total Labour (Excl. VAT):</strong></td>
-                            <td colspan="3">@laborBase.ToString("N2", new System.Globalization.CultureInfo("sl-SI")) €</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" class="text-end"><strong>Total Labour VAT (9.5%):</strong></td>
-                            <td colspan="3">@laborVAT.ToString("N2", new System.Globalization.CultureInfo("sl-SI")) €</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" class="text-end"><strong>Grand Total (Excl. VAT):</strong></td>
-                            <td colspan="3">@grandTotalExclVAT.ToString("N2", new System.Globalization.CultureInfo("sl-SI")) €</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" class="text-end"><strong>Grand Total (Incl. VAT):</strong></td>
-                            <td colspan="3">
-                                <strong>@grandTotal.ToString("N2", new System.Globalization.CultureInfo("sl-SI")) €</strong>
-                            </td>
-                        </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
+        }
+        else
+        {
+            <div class="alert alert-info">No parts recorded for this work order.</div>
+        }
+        
+          @if (Model.PartsUsed != null && Model.PartsUsed.Any())
+        {
+             <div class="card">
+        <div class="card-header">
+            <h4>Billing</h4>
+        </div>
+        <div class="card-body">
+            @{
+                var partsBase = Model.PartsUsed?.Sum(p => p.Quantity * p.PartCatalog.PartPrice) ?? 0;
+                var partsVAT = partsBase * 0.22m;
+
+                var laborBase = Model.ServiceDetails?.Sum(s => s.HourlyRate * s.LaborHours) ?? 0;
+                var laborVAT = laborBase * 0.095m;
+
+                var grandTotalExclVAT = partsBase + laborBase;
+                var grandTotal = grandTotalExclVAT + partsVAT + laborVAT;
+            }
+
+            <table class="table table-hover shadow-sm">
+    
+                <tbody>
+                <tr>
+                    <td><strong>Total Parts (Excl. VAT):</strong></td>
+                    <td class="text-end">@partsBase.ToString("N2", new System.Globalization.CultureInfo("sl-SI")) €</td>
+                </tr>
+                <tr>
+                    <td><strong>Total Parts VAT (22%):</strong></td>
+                    <td class="text-end">@partsVAT.ToString("N2", new System.Globalization.CultureInfo("sl-SI")) €</td>
+                </tr>
+                <tr>
+                    <td><strong>Total Labour (Excl. VAT):</strong></td>
+                    <td class="text-end">@laborBase.ToString("N2", new System.Globalization.CultureInfo("sl-SI")) €</td>
+                </tr>
+                <tr>
+                    <td><strong>Total Labour VAT (9.5%):</strong></td>
+                    <td class="text-end">@laborVAT.ToString("N2", new System.Globalization.CultureInfo("sl-SI")) €</td>
+                </tr>
+                <tr>
+                    <td><strong>Grand Total (Excl. VAT):</strong></td>
+                    <td class="text-end">@grandTotalExclVAT.ToString("N2", new System.Globalization.CultureInfo("sl-SI")) €</td>
+                </tr>
+                <tr class="table-primary">
+                    <td><strong>Grand Total (Incl. VAT):</strong></td>
+                    <td class="text-end">
+                        <strong>@grandTotal.ToString("N2", new System.Globalization.CultureInfo("sl-SI")) €</strong>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="d-flex justify-content-center align-items-center mb-2">
+            <a class="btn btn-outline-primary btn-sm w-25" asp-controller="Invoice" asp-action="Create" asp-route-workOrderId="@Model.Id">Create Invoice</a>
+        </div>
+    </div>
+
         }
         else
         {

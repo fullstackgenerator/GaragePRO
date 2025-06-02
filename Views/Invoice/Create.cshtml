@@ -24,12 +24,12 @@
 
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label asp-for="SubTotal" class="form-label"></label>
+                    <label asp-for="SubTotal" class="form-label">Sub Total</label>
                     <input asp-for="SubTotal" class="form-control" id="SubTotal" readonly/>
                     <span asp-validation-for="SubTotal" class="text-danger"></span>
                 </div>
                 <div class="col-md-6">
-                    <label asp-for="TaxAmount" class="form-label"></label>
+                    <label asp-for="TaxAmount" class="form-label">Tax Amount</label>
                     <input asp-for="TaxAmount" class="form-control" id="TaxAmount" readonly/>
                     <span asp-validation-for="TaxAmount" class="text-danger"></span>
                 </div>
@@ -42,7 +42,7 @@
                     <span asp-validation-for="Total" class="text-danger"></span>
                 </div>
                 <div class="col-md-6">
-                    <label asp-for="PaymentType" class="form-label"></label>
+                    <label asp-for="PaymentType" class="form-label">Payment Type</label>
                     <select asp-for="PaymentType" class="form-select">
                         <option value="">-- Select Payment Type --</option>
                         @foreach (var type in Enum.GetValues(typeof(GaragePRO.Models.PaymentType)))
@@ -67,7 +67,7 @@
                     <span asp-validation-for="Status" class="text-danger"></span>
                 </div>
                 <div class="col-md-6">
-                    <label asp-for="DateIssued" class="form-label"></label>
+                    <label asp-for="DateIssued" class="form-label">Date Issued</label>
                     <input asp-for="DateIssued" class="form-control" type="date"/>
                     <span asp-validation-for="DateIssued" class="text-danger"></span>
                 </div>
