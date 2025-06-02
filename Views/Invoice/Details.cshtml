@@ -19,7 +19,7 @@
                     <a class="dropdown-item" asp-action="Edit" asp-route-id="@Model.Id">Edit Invoice</a>
                 </li>
                 <li>
-                    <a class="dropdown-item" href="#">Export PDF (Placeholder)</a>
+                    <a class="dropdown-item" asp-action="ExportPdf" asp-route-id="@Model.Id">Export PDF</a>
                 </li>
                 @if (Model.Status == InvoiceStatus.Paid)
                 {
@@ -41,7 +41,7 @@
     </div>
 </div>
 
-<div class="card mb-4">
+<div class="card mb-4 shadow-sm">
     <div class="card-header">
         <h5>Invoice Information</h5>
     </div>
@@ -67,7 +67,7 @@
     </div>
 </div>
 
-<div class="card mb-4">
+<div class="card mb-4 shadow-sm">
     <div class="card-header">
         <h5>Customer Details</h5>
     </div>
@@ -81,7 +81,7 @@
     </div>
 </div>
 
-<div class="card mb-4">
+<div class="card mb-4 shadow-sm">
     <div class="card-header">
         <h5>Vehicle Details</h5>
     </div>
@@ -94,7 +94,7 @@
     </div>
 </div>
 
-<div class="card mb-4">
+<div class="card mb-4 shadow-sm">
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5>Service Details</h5>
     </div>
@@ -134,7 +134,7 @@
     </div>
 </div>
 
-<div class="card mb-4">
+<div class="card mb-4 shadow-sm">
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5>Parts Used</h5>
     </div>
@@ -142,7 +142,7 @@
         @if (Model.WorkOrder?.PartsUsed != null && Model.WorkOrder.PartsUsed.Any())
         {
             <div class="table-responsive">
-                <table class="table table-hover shadow-sm">
+                <table class="table table-hover">
                     <thead>
                     <tr>
                         <th>Part Name</th>
@@ -174,13 +174,12 @@
     </div>
 </div>
 
-<div class="card mb-4">
+<div class="card mb-4 shadow-sm">
     <div class="card-header">
-        <h5>Price Specification (Detailed Billing)</h5>
+        <h5>Price Specification</h5>
     </div>
     <div class="card-body">
         @{
-            // Ensure WorkOrder and its collections are not null for calculations
             var partsBase = Model.WorkOrder?.PartsUsed?.Sum(p => p.Quantity * (p.PartCatalog?.PartPrice ?? 0m)) ?? 0m;
             var partsVAT = partsBase * 0.22m;
 
@@ -191,7 +190,7 @@
             var grandTotal = grandTotalExclVAT + partsVAT + laborVAT;
         }
 
-        <table class="table table-hover shadow-sm">
+        <table class="table table-hover">
             <tbody>
             <tr>
                 <td><strong>Total Parts (Excl. VAT):</strong></td>

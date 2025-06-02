@@ -2,16 +2,20 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GaragePRO.Models;
+using GaragePRO.PdfDocuments;
+using QuestPDF.Fluent;
 
 namespace GaragePRO.Controllers;
 
 public class InvoiceController : Controller
 {
     private readonly ApplicationDbContext _context;
+    private readonly IWebHostEnvironment _webHostEnvironment;
 
-    public InvoiceController(ApplicationDbContext context)
+    public InvoiceController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
     {
         _context = context;
+        _webHostEnvironment = webHostEnvironment;
     }
 
     public async Task<IActionResult> Index(string searchString, DateTime? fromDate, DateTime? toDate, bool showArchived = false)
@@ -247,7 +251,33 @@ public class InvoiceController : Controller
 
             await _context.SaveChangesAsync();
         }
-
+        
         return RedirectToAction(nameof(Details), new { id = id });
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> ExportPdf(int id)
+    {
+        var invoice = await _context.Invoices
+            .Include(i => i.WorkOrder)
+            .ThenInclude(w => w.Vehicle)
+            .ThenInclude(v => v.Customer)
+            .Include(i => i.WorkOrder)
+            .ThenInclude(w => w.ServiceDetails)
+            .Include(i => i.WorkOrder)
+            .ThenInclude(w => w.PartsUsed)
+            .ThenInclude(p => p.PartCatalog)
+            .FirstOrDefaultAsync(i => i.Id == id);
+
+        if (invoice == null)
+        {
+            return NotFound();
+        }
+        
+        var document = new InvoiceDocument(invoice, _webHostEnvironment);
+
+        byte[] pdfBytes = document.GeneratePdf();
+
+        return File(pdfBytes, "application/pdf", $"Invoice_#{invoice.Id}.pdf");
     }
 }
