@@ -26,7 +26,7 @@ public class HomeController : Controller
             .CountAsync();
 
         var unpaidInvoices = await _context.Invoices
-            .Where(inv => inv.Status == InvoiceStatus.Pending || inv.Status == InvoiceStatus.Issued)
+            .Where(inv => inv.Status == InvoiceStatus.Pending || inv.Status == InvoiceStatus.Issued || inv.Status == InvoiceStatus.Unpaid) 
             .CountAsync();
 
         var totalCustomers = await _context.Customers.CountAsync();
