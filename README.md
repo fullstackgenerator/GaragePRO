@@ -1,5 +1,7 @@
 <h2><strong>GaragePRO</strong>: A Comprehensive Garage Management System</h2> 
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 <strong>GaragePRO</strong> is a robust ASP.NET Core MVC web application developed to efficiently manage the day-to-day operations of an automotive service garage. From initial customer intake to final invoice generation, this system centralizes critical data and workflows, enhancing productivity and organization.
 
 ![image](https://github.com/user-attachments/assets/100de71e-8fed-43a9-920e-dc7dafaf3d08)
@@ -45,3 +47,7 @@ Invoice Generation: Automatically generate professional invoices based on comple
 For robust and flexible PDF generation, the application integrates QuestPDF.
 
 ![img22](https://github.com/user-attachments/assets/fb9f8300-e073-42c8-8193-27b99499088a)
+
+### License
+
+This project is licensed under the [MIT License](LICENSE).
